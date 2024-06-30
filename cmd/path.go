@@ -12,15 +12,20 @@ Example:
   swagen path get /paths/user --fileName=users.yaml --operationId=getUsers --summary="Get all users" --description="Get all users from the system"
 `
 
+var (
+	dir string
+)
+
 var pathCommand = &cobra.Command{
-	Use:   "path <method> <path>",
+	Use:   "path <method>",
 	Short: "Generate a path in the swagger yaml file",
 	Long:  LONG_SUMMARY,
+	// TODO: Decide if we need to validate the args here or not
 	// Args:  validate.ValidatePathCommandArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		method := args[0]
 
-		inputs := input_path.NewPathInputs(cmd)
+		inputs := input_path.NewGetPathInputs(cmd)
 		inputs.ReadAll()
 
 		params := run.PathCommandParams{
@@ -35,10 +40,15 @@ var pathCommand = &cobra.Command{
 			Responses:   inputs.GetResponses(),
 		}
 
-		run.PathCommandHandler(params)
+		run.PathCommandHandler(params, dir)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(pathCommand)
+
+	pathCommand.Flags().StringVarP(&dir, "dir", "d", "", "Directory to save the generated file")
+
+	// Required flags
+	pathCommand.MarkFlagRequired("dir")
 }

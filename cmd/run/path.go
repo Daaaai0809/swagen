@@ -22,15 +22,17 @@ type PathCommandParams struct {
 	Responses   types.Responses
 }
 
-func PathCommandHandler(params PathCommandParams) error {
+func PathCommandHandler(params PathCommandParams, dir string) error {
 	var s generate.IPathSchema = nil
 
 	c := config.GetConfig()
 
 	switch params.Method {
 	case constant.GET_FILE:
+		path := fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
+
 		s = methods.NewGetPathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.Parameters, params.Responses)
-		if err := generate.GeneratePathYamlFile(s, c.GetPathDir(), params.FileName); err != nil {
+		if err := generate.GeneratePathYamlFile(s, path, params.FileName); err != nil {
 			return err
 		}
 		return nil
