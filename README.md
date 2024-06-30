@@ -1,1 +1,1 @@
-# go-swg-gen
+# swagen
