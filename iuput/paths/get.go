@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type PathInputs struct {
+type GetPathInputs struct {
 	cmd         *cobra.Command
 	fileName    string
 	operationID string
@@ -22,8 +22,8 @@ type PathInputs struct {
 	responses   types.Responses
 }
 
-func NewPathInputs(cmd *cobra.Command) *PathInputs {
-	return &PathInputs{
+func NewGetPathInputs(cmd *cobra.Command) *GetPathInputs {
+	return &GetPathInputs{
 		cmd:         cmd,
 		fileName:    "",
 		operationID: "",
@@ -36,7 +36,8 @@ func NewPathInputs(cmd *cobra.Command) *PathInputs {
 	}
 }
 
-func (p *PathInputs) ReadAll() {
+// The ReadAll method reads all the input required to define an endpoint.
+func (p *GetPathInputs) ReadAll() {
 	p.ReadFileName()
 	p.ReadOperationID()
 
@@ -65,15 +66,16 @@ func (p *PathInputs) ReadAll() {
 	}
 }
 
-func (p *PathInputs) SetFileName(fileName string) {
+func (p *GetPathInputs) SetFileName(fileName string) {
 	p.fileName = fileName
 }
 
-func (p *PathInputs) GetFileName() string {
+func (p *GetPathInputs) GetFileName() string {
 	return p.fileName
 }
 
-func (p *PathInputs) ReadFileName() {
+// The ReadFileName method takes input from the CLI to define the file name for the endpoint.
+func (p *GetPathInputs) ReadFileName() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.cmd.Println("Enter the file name: ")
@@ -83,15 +85,16 @@ func (p *PathInputs) ReadFileName() {
 	p.SetFileName(scanner.Text())
 }
 
-func (p *PathInputs) SetOperationID(operationID string) {
+func (p *GetPathInputs) SetOperationID(operationID string) {
 	p.operationID = operationID
 }
 
-func (p *PathInputs) GetOperationID() string {
+func (p *GetPathInputs) GetOperationID() string {
 	return p.operationID
 }
 
-func (p *PathInputs) ReadOperationID() {
+// The ReadOperationID method takes input from the CLI to define the operation ID for the endpoint.
+func (p *GetPathInputs) ReadOperationID() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.cmd.Println("Enter the operation ID: ")
@@ -101,15 +104,16 @@ func (p *PathInputs) ReadOperationID() {
 	p.SetOperationID(scanner.Text())
 }
 
-func (p *PathInputs) SetSummary(summary string) {
+func (p *GetPathInputs) SetSummary(summary string) {
 	p.summary = summary
 }
 
-func (p *PathInputs) GetSummary() string {
+func (p *GetPathInputs) GetSummary() string {
 	return p.summary
 }
 
-func (p *PathInputs) ReadSummary() {
+// The ReadSummary method takes input from the CLI to define a summary for the endpoint.
+func (p *GetPathInputs) ReadSummary() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.cmd.Println("Enter the summary: ")
@@ -119,15 +123,16 @@ func (p *PathInputs) ReadSummary() {
 	p.SetSummary(scanner.Text())
 }
 
-func (p *PathInputs) SetDescription(description string) {
+func (p *GetPathInputs) SetDescription(description string) {
 	p.description = description
 }
 
-func (p *PathInputs) GetDescription() string {
+func (p *GetPathInputs) GetDescription() string {
 	return p.description
 }
 
-func (p *PathInputs) ReadDescription() {
+// The ReadDescription method takes input from the CLI to define the description of the endpoint.
+func (p *GetPathInputs) ReadDescription() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.cmd.Println("Enter the description: ")
@@ -137,15 +142,17 @@ func (p *PathInputs) ReadDescription() {
 	p.SetDescription(scanner.Text())
 }
 
-func (p *PathInputs) SetTags(tags []string) {
+func (p *GetPathInputs) SetTags(tags []string) {
 	p.tags = tags
 }
 
-func (p *PathInputs) GetTags() []string {
+func (p *GetPathInputs) GetTags() []string {
 	return p.tags
 }
 
-func (p *PathInputs) ReadTags() {
+// The ReadTags method takes input from the CLI to define tags for the endpoint.
+// It supports multiple tags.
+func (p *GetPathInputs) ReadTags() {
 	var tags = make([]string, 0)
 
 	scaanner := bufio.NewScanner(os.Stdin)
@@ -167,15 +174,17 @@ func (p *PathInputs) ReadTags() {
 	p.SetTags(tags)
 }
 
-func (p *PathInputs) SetSecurity(security []string) {
+func (p *GetPathInputs) SetSecurity(security []string) {
 	p.security = security
 }
 
-func (p *PathInputs) GetSecurity() []string {
+func (p *GetPathInputs) GetSecurity() []string {
 	return p.security
 }
 
-func (p *PathInputs) ReadSecurity() {
+// The ReadSecurity method takes input from the CLI to define the security types required for the endpoint.
+// It supports multiple security types.
+func (p *GetPathInputs) ReadSecurity() {
 	var securities = make([]string, 0)
 
 	for {
@@ -195,15 +204,17 @@ func (p *PathInputs) ReadSecurity() {
 	p.SetSecurity(securities)
 }
 
-func (p *PathInputs) SetParameters(parameters types.Parameters) {
+func (p *GetPathInputs) SetParameters(parameters types.Parameters) {
 	p.parameters = parameters
 }
 
-func (p *PathInputs) GetParameters() types.Parameters {
+func (p *GetPathInputs) GetParameters() types.Parameters {
 	return p.parameters
 }
 
-func (p *PathInputs) ReadParameters() {
+// The ReadParameter method takes input from the CLI to define URL parameters.
+// It supports parameter definitions on the CLI as well as definitions in other files using Ref.
+func (p *GetPathInputs) ReadParameters() {
 	var parameters = make(types.Parameters, 0)
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -284,15 +295,17 @@ func (p *PathInputs) ReadParameters() {
 	p.SetParameters(parameters)
 }
 
-func (p *PathInputs) SetResponses(responses types.Responses) {
+func (p *GetPathInputs) SetResponses(responses types.Responses) {
 	p.responses = responses
 }
 
-func (p *PathInputs) GetResponses() types.Responses {
+func (p *GetPathInputs) GetResponses() types.Responses {
 	return p.responses
 }
 
-func (p *PathInputs) ReadResponses() {
+// The ReadResponses method takes input to define the response types returned by the endpoint for each response code.
+// Currently, it only supports the Ref schema in Content Parameter, but we plan to support response type definitions on the CLI in the future.
+func (p *GetPathInputs) ReadResponses() {
 	var responses = make(types.Responses)
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -332,6 +345,7 @@ func (p *PathInputs) ReadResponses() {
 				},
 			}
 		} else {
+			// TODO: Implement Defination of Schema with types.Schema
 			response.Content = map[string]types.Content{
 				contentType: {
 					Schema: types.ContentSchema{},
