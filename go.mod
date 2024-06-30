@@ -1,4 +1,4 @@
-module github.com/Daaaai0809/go-swg-gen
+module github.com/Daaaai0809/swagen
 
 go 1.21.7
 
