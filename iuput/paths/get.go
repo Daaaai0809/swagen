@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/Daaaai0809/swagen/constant"
-	"github.com/Daaaai0809/swagen/generate/types"
+	"github.com/Daaaai0809/swagen/generate/methods"
 	"github.com/Daaaai0809/swagen/iuput"
 	"github.com/spf13/cobra"
 )
@@ -18,8 +18,8 @@ type GetPathInputs struct {
 	description string
 	tags        []string
 	security    []string
-	parameters  types.Parameters
-	responses   types.Responses
+	parameters  methods.Parameters
+	responses   methods.Responses
 }
 
 func NewGetPathInputs(cmd *cobra.Command) *GetPathInputs {
@@ -31,8 +31,8 @@ func NewGetPathInputs(cmd *cobra.Command) *GetPathInputs {
 		description: "",
 		tags:        []string{},
 		security:    []string{},
-		parameters:  types.Parameters{},
-		responses:   types.Responses{},
+		parameters:  methods.Parameters{},
+		responses:   methods.Responses{},
 	}
 }
 
@@ -182,8 +182,8 @@ func (p *GetPathInputs) GetSecurity() []string {
 	return p.security
 }
 
-// The ReadSecurity method takes input from the CLI to define the security types required for the endpoint.
-// It supports multiple security types.
+// The ReadSecurity method takes input from the CLI to define the security methods required for the endpoint.
+// It supports multiple security methods.
 func (p *GetPathInputs) ReadSecurity() {
 	var securities = make([]string, 0)
 
@@ -204,30 +204,30 @@ func (p *GetPathInputs) ReadSecurity() {
 	p.SetSecurity(securities)
 }
 
-func (p *GetPathInputs) SetParameters(parameters types.Parameters) {
+func (p *GetPathInputs) SetParameters(parameters methods.Parameters) {
 	p.parameters = parameters
 }
 
-func (p *GetPathInputs) GetParameters() types.Parameters {
+func (p *GetPathInputs) GetParameters() methods.Parameters {
 	return p.parameters
 }
 
 // The ReadParameter method takes input from the CLI to define URL parameters.
 // It supports parameter definitions on the CLI as well as definitions in other files using Ref.
 func (p *GetPathInputs) ReadParameters() {
-	var parameters = make(types.Parameters, 0)
+	var parameters = make(methods.Parameters, 0)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
 		if ok := input.YesNoPrompt(p.cmd, "Ref Parameter?"); ok {
-			var parameter types.RefParameter
+			var parameter methods.RefParameter
 
 			p.cmd.Println("Enter the Ref: ")
 
 			scanner.Scan()
 
-			parameter = types.RefParameter(scanner.Text())
+			parameter = methods.RefParameter(scanner.Text())
 
 			parameters = append(parameters, &parameter)
 
@@ -238,7 +238,7 @@ func (p *GetPathInputs) ReadParameters() {
 			continue
 		}
 
-		var parameter = types.Parameter{
+		var parameter = methods.Parameter{
 			Schema: make(map[string]string),
 		}
 
@@ -295,23 +295,23 @@ func (p *GetPathInputs) ReadParameters() {
 	p.SetParameters(parameters)
 }
 
-func (p *GetPathInputs) SetResponses(responses types.Responses) {
+func (p *GetPathInputs) SetResponses(responses methods.Responses) {
 	p.responses = responses
 }
 
-func (p *GetPathInputs) GetResponses() types.Responses {
+func (p *GetPathInputs) GetResponses() methods.Responses {
 	return p.responses
 }
 
-// The ReadResponses method takes input to define the response types returned by the endpoint for each response code.
+// The ReadResponses method takes input to define the response methods returned by the endpoint for each response code.
 // Currently, it only supports the Ref schema in Content Parameter, but we plan to support response type definitions on the CLI in the future.
 func (p *GetPathInputs) ReadResponses() {
-	var responses = make(types.Responses)
+	var responses = make(methods.Responses)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
-		var response types.Response
+		var response methods.Response
 
 		statusCode, err := input.SingleSelect("Select the status code", constant.StatusCodesList)
 		if err != nil {
@@ -335,20 +335,20 @@ func (p *GetPathInputs) ReadResponses() {
 
 			scanner.Scan()
 
-			response.Content = map[string]types.Content{
+			response.Content = map[string]methods.Content{
 				contentType: {
-					Schema: types.ContentSchema{
-						&types.RefSchema{
+					Schema: methods.ContentSchema{
+						&methods.RefSchema{
 							Ref: scanner.Text(),
 						},
 					},
 				},
 			}
 		} else {
-			// TODO: Implement Defination of Schema with types.Schema
-			response.Content = map[string]types.Content{
+			// TODO: Implement Defination of Schema with methods.Schema
+			response.Content = map[string]methods.Content{
 				contentType: {
-					Schema: types.ContentSchema{},
+					Schema: methods.ContentSchema{},
 				},
 			}
 		}

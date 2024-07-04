@@ -1,8 +1,16 @@
-package types
+package methods
 
 import (
 	"github.com/Daaaai0809/swagen/constant"
 )
+
+type PathRoot struct {
+	Get  GetPathSchema  `yaml:"get,omitempty"`
+	Post PostPathSchema `yaml:"post,omitempty"`
+	// Put PutPathSchema `yaml:"put,omitempty"`
+	// Patch PatchPathSchema `yaml:"patch,omitempty"`
+	// Delete DeletePathSchema `yaml:"delete,omitempty"`
+}
 
 type IParameters interface {
 	GetString() string

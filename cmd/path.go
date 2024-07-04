@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/Daaaai0809/swagen/cmd/run"
-	"github.com/Daaaai0809/swagen/generate/types"
+	"github.com/Daaaai0809/swagen/generate/methods"
 	input_path "github.com/Daaaai0809/swagen/iuput/paths"
 	"github.com/spf13/cobra"
 )
@@ -35,7 +35,7 @@ var pathCommand = &cobra.Command{
 			Summary:     inputs.GetSummary(),
 			Description: inputs.GetDescription(),
 			Tags:        inputs.GetTags(),
-			Security:    types.GetSecurity(inputs.GetSecurity()),
+			Security:    methods.GetSecurity(inputs.GetSecurity()),
 			Parameters:  inputs.GetParameters(),
 			Responses:   inputs.GetResponses(),
 		}

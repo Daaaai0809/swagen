@@ -9,7 +9,6 @@ import (
 
 	generate "github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/generate/methods"
-	"github.com/Daaaai0809/swagen/generate/types"
 )
 
 const expectedYaml = `get:
@@ -58,35 +57,35 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 		Summary:     "Summary",
 		Description: "Description",
 		Tags:        []string{"tag1", "tag2"},
-		Security: []types.Security{
+		Security: []methods.Security{
 			{
 				"bearer": {},
 			},
 		},
-		Parameters: types.Parameters{
-			&types.Parameter{
+		Parameters: methods.Parameters{
+			&methods.Parameter{
 				Name:        "param1",
 				In:          "query",
 				Description: "Parameter 1",
 				Required:    true,
-				Schema: types.ParameterSchema{
+				Schema: methods.ParameterSchema{
 					"type":   "string",
 					"format": "format",
 				},
 			},
 		},
-		Responses: types.Responses{
-			"200": types.Response{
+		Responses: methods.Responses{
+			"200": methods.Response{
 				Description: "OK",
-				Content: map[string]types.Content{
+				Content: map[string]methods.Content{
 					"application/json": {
-						Schema: types.ContentSchema{
-							&types.RefSchema{
+						Schema: methods.ContentSchema{
+							&methods.RefSchema{
 								Ref: "#/components/schemas/Response",
 							},
-							&types.Schema{
+							&methods.Schema{
 								Type: "object",
-								Properties: map[string]types.SchemaProperty{
+								Properties: map[string]methods.SchemaProperty{
 									"property1": {
 										Type: "string",
 									},
@@ -113,35 +112,35 @@ func TestGenerateYamlFile(t *testing.T) {
 		Summary:     "Summary",
 		Description: "Description",
 		Tags:        []string{"tag1", "tag2"},
-		Security: []types.Security{
+		Security: []methods.Security{
 			{
 				"bearer": {},
 			},
 		},
-		Parameters: types.Parameters{
-			&types.Parameter{
+		Parameters: methods.Parameters{
+			&methods.Parameter{
 				Name:        "param1",
 				In:          "query",
 				Description: "Parameter 1",
 				Required:    true,
-				Schema: types.ParameterSchema{
+				Schema: methods.ParameterSchema{
 					"Type":   "string",
 					"Format": "format",
 				},
 			},
 		},
-		Responses: types.Responses{
-			"200": types.Response{
+		Responses: methods.Responses{
+			"200": methods.Response{
 				Description: "OK",
-				Content: map[string]types.Content{
+				Content: map[string]methods.Content{
 					"application/json": {
-						Schema: types.ContentSchema{
-							&types.RefSchema{
+						Schema: methods.ContentSchema{
+							&methods.RefSchema{
 								Ref: "#/components/schemas/Response",
 							},
-							&types.Schema{
+							&methods.Schema{
 								Type: "object",
-								Properties: map[string]types.SchemaProperty{
+								Properties: map[string]methods.SchemaProperty{
 									"property1": {
 										Type: "string",
 									},
@@ -198,35 +197,35 @@ func TestGenerateYamlFileWithInvalidPath(t *testing.T) {
 		Summary:     "Summary",
 		Description: "Description",
 		Tags:        []string{"tag1", "tag2"},
-		Security: []types.Security{
+		Security: []methods.Security{
 			{
 				"bearer": {},
 			},
 		},
-		Parameters: types.Parameters{
-			&types.Parameter{
+		Parameters: methods.Parameters{
+			&methods.Parameter{
 				Name:        "param1",
 				In:          "query",
 				Description: "Parameter 1",
 				Required:    true,
-				Schema: types.ParameterSchema{
+				Schema: methods.ParameterSchema{
 					"type":   "string",
 					"format": "format",
 				},
 			},
 		},
-		Responses: types.Responses{
-			"200": types.Response{
+		Responses: methods.Responses{
+			"200": methods.Response{
 				Description: "OK",
-				Content: map[string]types.Content{
+				Content: map[string]methods.Content{
 					"application/json": {
-						Schema: types.ContentSchema{
-							&types.RefSchema{
+						Schema: methods.ContentSchema{
+							&methods.RefSchema{
 								Ref: "#/components/schemas/Response",
 							},
-							&types.Schema{
+							&methods.Schema{
 								Type: "object",
-								Properties: map[string]types.SchemaProperty{
+								Properties: map[string]methods.SchemaProperty{
 									"property1": {
 										Type: "string",
 									},
