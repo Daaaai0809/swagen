@@ -48,6 +48,8 @@ type Response struct {
 
 type Content struct {
 	Schema ContentSchema `yaml:"schema"`
+	// TODO : Must support Example
+	// Example interface{} `yaml:"example,omitempty"`
 }
 
 type IContentSchema interface {
@@ -65,25 +67,18 @@ func (r *RefSchema) GetString() string {
 }
 
 type Schema struct {
-	Type       string                    `yaml:"type"`
-	Format     string                    `yaml:"format,omitempty"`
-	Properties map[string]SchemaProperty `yaml:"properties,omitempty"`
-	Required   []string                  `yaml:"required,omitempty"`
-	Nullable   bool                      `yaml:"nullable,omitempty"`
-	Items      map[string]SchemaProperty `yaml:"items,omitempty"`
+	Type       string            `yaml:"type"`
+	Format     string            `yaml:"format,omitempty"`
+	Properties map[string]Schema `yaml:"properties,omitempty"`
+	Required   []string          `yaml:"required,omitempty"`
+	Nullable   bool              `yaml:"nullable,omitempty"`
+	// TODO: Must support Example
+	// Example    interface{}               `yaml:"example,omitempty"`
+	Items map[string]Schema `yaml:"items,omitempty"`
 }
 
 func (s *Schema) GetString() string {
-	return s.Type
-}
-
-type SchemaProperty struct {
-	Type       string                    `yaml:"type"`
-	Format     string                    `yaml:"format,omitempty"`
-	Properties map[string]SchemaProperty `yaml:"properties,omitempty"`
-	Required   []string                  `yaml:"required,omitempty"`
-	Nullable   bool                      `yaml:"nullable,omitempty"`
-	Items      map[string]SchemaProperty `yaml:"items,omitempty"`
+	return ""
 }
 
 type Security = map[string][]interface{}

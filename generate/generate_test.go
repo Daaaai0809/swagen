@@ -85,7 +85,7 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 							},
 							&methods.Schema{
 								Type: "object",
-								Properties: map[string]methods.SchemaProperty{
+								Properties: map[string]methods.Schema{
 									"property1": {
 										Type: "string",
 									},
@@ -140,7 +140,7 @@ func TestGenerateYamlFile(t *testing.T) {
 							},
 							&methods.Schema{
 								Type: "object",
-								Properties: map[string]methods.SchemaProperty{
+								Properties: map[string]methods.Schema{
 									"property1": {
 										Type: "string",
 									},
@@ -225,7 +225,7 @@ func TestGenerateYamlFileWithInvalidPath(t *testing.T) {
 							},
 							&methods.Schema{
 								Type: "object",
-								Properties: map[string]methods.SchemaProperty{
+								Properties: map[string]methods.Schema{
 									"property1": {
 										Type: "string",
 									},
