@@ -6,6 +6,7 @@ const (
 	TEXT_XML_ID
 	TEXT_CSS_ID
 	TEXT_JAVASCRIPT_ID
+	TEXT_CSV_ID
 	APPLICATION_JSON_ID
 	APPLICATION_JSON_PATCH_JSON_ID
 	APPLICATION_LD_JSON_ID
@@ -39,6 +40,7 @@ const (
 	TEXT_XML                          = "text/xml"
 	TEXT_CSS                          = "text/css"
 	TEXT_JAVASCRIPT                   = "text/javascript"
+	TEXT_CSV                          = "text/csv"
 	APPLICATION_JSON                  = "application/json"
 	APPLICATION_JSON_PATCH_JSON       = "application/json-patch+json"
 	APPLICATION_LD_JSON               = "application/ld+json"
@@ -74,6 +76,7 @@ var ContentTypeList = []string{
 	TEXT_XML,
 	TEXT_CSS,
 	TEXT_JAVASCRIPT,
+	TEXT_CSV,
 	APPLICATION_JSON,
 	APPLICATION_JSON_PATCH_JSON,
 	APPLICATION_LD_JSON,
