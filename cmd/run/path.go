@@ -7,7 +7,6 @@ import (
 	"github.com/Daaaai0809/swagen/constant"
 	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/generate/methods"
-	"github.com/Daaaai0809/swagen/generate/types"
 )
 
 type PathCommandParams struct {
@@ -17,9 +16,10 @@ type PathCommandParams struct {
 	Summary     string
 	Description string
 	Tags        []string
-	Security    []types.Security
-	Parameters  types.Parameters
-	Responses   types.Responses
+	Security    []methods.Security
+	RequestBody methods.RequestBody
+	Parameters  methods.Parameters
+	Responses   methods.Responses
 }
 
 func PathCommandHandler(params PathCommandParams, dir string) error {
@@ -37,6 +37,13 @@ func PathCommandHandler(params PathCommandParams, dir string) error {
 		}
 		return nil
 	case constant.POST_FILE:
+		path := fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
+
+		s = methods.NewPostPathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.RequestBody, params.Parameters, params.Responses)
+		if err := generate.GeneratePathYamlFile(s, path, params.FileName); err != nil {
+			return err
+		}
+		return nil
 	case constant.PUT_FILE:
 	case constant.DELETE_FILE:
 	default:
