@@ -6,10 +6,10 @@ on:
       - '*'
   pull_request:
     branches:
-      # All branches except main
-      - '*'
+      - main
+      - develop
 jobs:
-  go-test:
+  code-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
