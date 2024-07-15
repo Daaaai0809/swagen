@@ -17,6 +17,7 @@ type PathCommandParams struct {
 	Description string
 	Tags        []string
 	Security    []methods.Security
+	RequestBody methods.RequestBody
 	Parameters  methods.Parameters
 	Responses   methods.Responses
 }
@@ -36,6 +37,13 @@ func PathCommandHandler(params PathCommandParams, dir string) error {
 		}
 		return nil
 	case constant.POST_FILE:
+		path := fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
+
+		s = methods.NewPostPathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.RequestBody, params.Parameters, params.Responses)
+		if err := generate.GeneratePathYamlFile(s, path, params.FileName); err != nil {
+			return err
+		}
+		return nil
 	case constant.PUT_FILE:
 	case constant.DELETE_FILE:
 	default:
