@@ -59,6 +59,22 @@ var pathCommand = &cobra.Command{
 				Parameters:  inputs.GetParameters(),
 				Responses:   inputs.GetResponses(),
 			}
+		case constant.PUT_FILE:
+			inputs := input_path.NewPutPathInputs(cmd)
+			inputs.ReadAll()
+
+			params = run.PathCommandParams{
+				Method:      method,
+				FileName:    inputs.GetFileName(),
+				OperationID: inputs.GetOperationID(),
+				Summary:     inputs.GetSummary(),
+				Description: inputs.GetDescription(),
+				Tags:        inputs.GetTags(),
+				Security:    methods.GetSecurity(inputs.GetSecurity()),
+				RequestBody: inputs.GetRequestBody(),
+				Parameters:  inputs.GetParameters(),
+				Responses:   inputs.GetResponses(),
+			}
 		}
 
 		run.PathCommandHandler(params, dir)
