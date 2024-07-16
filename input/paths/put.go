@@ -10,13 +10,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type PostPathInputs struct {
+type PutPathInputs struct {
 	RootInputs
 	RequestBody methods.RequestBody
 }
 
-func NewPostPathInputs(cmd *cobra.Command) *PostPathInputs {
-	return &PostPathInputs{
+func NewPutPathInputs(cmd *cobra.Command) *PutPathInputs {
+	return &PutPathInputs{
 		RootInputs: RootInputs{
 			Cmd:         cmd,
 			FileName:    "",
@@ -33,7 +33,7 @@ func NewPostPathInputs(cmd *cobra.Command) *PostPathInputs {
 }
 
 // The ReadAll method reads all the input required to define an endpoint.
-func (p *PostPathInputs) ReadAll() {
+func (p *PutPathInputs) ReadAll() {
 	p.ReadFileName()
 	p.ReadOperationID()
 
@@ -66,16 +66,16 @@ func (p *PostPathInputs) ReadAll() {
 	}
 }
 
-func (p *PostPathInputs) SetRequestBody(requestBody methods.RequestBody) {
+func (p *PutPathInputs) SetRequestBody(requestBody methods.RequestBody) {
 	p.RequestBody = requestBody
 }
 
-func (p *PostPathInputs) GetRequestBody() methods.RequestBody {
+func (p *PutPathInputs) GetRequestBody() methods.RequestBody {
 	return p.RequestBody
 }
 
 // The ReadRequestBody method takes input from the CLI to define the request body for the endpoint.
-func (p *PostPathInputs) ReadRequestBody() {
+func (p *PutPathInputs) ReadRequestBody() {
 	requestBody := methods.RequestBody{}
 
 	scanner := bufio.NewScanner(os.Stdin)
