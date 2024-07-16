@@ -23,31 +23,35 @@ type PathCommandParams struct {
 }
 
 func PathCommandHandler(params PathCommandParams, dir string) error {
+	var path string
 	var s generate.IPathSchema = nil
 
 	c := config.GetConfig()
 
 	switch params.Method {
 	case constant.GET_FILE:
-		path := fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
+		path = fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
 
 		s = methods.NewGetPathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.Parameters, params.Responses)
-		if err := generate.GeneratePathYamlFile(s, path, params.FileName); err != nil {
-			return err
-		}
-		return nil
 	case constant.POST_FILE:
-		path := fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
+		path = fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
 
 		s = methods.NewPostPathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.RequestBody, params.Parameters, params.Responses)
-		if err := generate.GeneratePathYamlFile(s, path, params.FileName); err != nil {
-			return err
-		}
-		return nil
 	case constant.PUT_FILE:
+		path = fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
+
+		s = methods.NewPutPathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.RequestBody, params.Parameters, params.Responses)
 	case constant.DELETE_FILE:
 	default:
 		return fmt.Errorf("invalid command: %s", params.Method)
+	}
+
+	if path == "" {
+		return fmt.Errorf("do not have a empty path")
+	}
+
+	if err := generate.GeneratePathYamlFile(s, path, params.FileName); err != nil {
+		return err
 	}
 
 	return nil
