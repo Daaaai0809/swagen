@@ -130,7 +130,9 @@ func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner) {
 			continue
 		}
 
-		prop.ReadFormat(cmd, prop.Type)
+		if prop.Type == constant.STRING_TYPE || prop.Type == constant.NUMBER_TYPE || prop.Type == constant.INTEGER_TYPE {
+			prop.ReadFormat(cmd, prop.Type)
+		}
 
 		switch prop.Type {
 		case constant.OBJECT_TYPE:
@@ -176,7 +178,9 @@ func (s *Schema) ReadItems(cmd *cobra.Command, scanner *bufio.Scanner) {
 			continue
 		}
 
-		item.ReadFormat(cmd, item.Type)
+		if item.Type == constant.STRING_TYPE || item.Type == constant.NUMBER_TYPE || item.Type == constant.INTEGER_TYPE {
+			item.ReadFormat(cmd, item.Type)
+		}
 
 		switch item.Type {
 		case constant.OBJECT_TYPE:
