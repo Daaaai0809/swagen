@@ -9,11 +9,10 @@ import (
 )
 
 type PathRoot struct {
-	Get  GetPathSchema  `yaml:"get,omitempty"`
-	Post PostPathSchema `yaml:"post,omitempty"`
-	Put  PutPathSchema  `yaml:"put,omitempty"`
-	// Patch PatchPathSchema `yaml:"patch,omitempty"`
-	// Delete DeletePathSchema `yaml:"delete,omitempty"`
+	Get    GetPathSchema    `yaml:"get,omitempty"`
+	Post   PostPathSchema   `yaml:"post,omitempty"`
+	Put    PutPathSchema    `yaml:"put,omitempty"`
+	Delete DeletePathSchema `yaml:"delete,omitempty"`
 }
 
 type IParameters interface {
@@ -68,6 +67,15 @@ type RefSchema struct {
 
 func (r *RefSchema) GetString() string {
 	return r.Ref
+}
+
+type RequestBody struct {
+	Description string             `yaml:"description"`
+	Content     map[string]Content `yaml:"content"`
+}
+
+func (r *RequestBody) GetString() string {
+	return ""
 }
 
 type Schema struct {

@@ -4,7 +4,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type PostPathSchema struct {
+type DeletePathSchema struct {
 	OperationID string      `yaml:"operationId"`
 	Summary     string      `yaml:"summary,omitempty"`
 	Description string      `yaml:"description,omitempty"`
@@ -15,8 +15,8 @@ type PostPathSchema struct {
 	Responses   Responses   `yaml:"responses"`
 }
 
-func NewPostPathSchema(operationID, summary, description string, tags []string, security []Security, requestBody RequestBody, parameters Parameters, responses Responses) *PostPathSchema {
-	return &PostPathSchema{
+func NewDeletePathSchema(operationID, summary, description string, tags []string, security []Security, requestBody RequestBody, parameters Parameters, responses Responses) *DeletePathSchema {
+	return &DeletePathSchema{
 		OperationID: operationID,
 		Summary:     summary,
 		Description: description,
@@ -28,9 +28,9 @@ func NewPostPathSchema(operationID, summary, description string, tags []string, 
 	}
 }
 
-func (p *PostPathSchema) ToYaml() (string, error) {
+func (d *DeletePathSchema) ToYaml() (string, error) {
 	r := PathRoot{
-		Post: *p,
+		Delete: *d,
 	}
 
 	yamlBytes, err := yaml.Marshal(r)

@@ -75,6 +75,22 @@ var pathCommand = &cobra.Command{
 				Parameters:  inputs.GetParameters(),
 				Responses:   inputs.GetResponses(),
 			}
+		case constant.DELETE_FILE:
+			inputs := input_path.NewDeletePathInputs(cmd)
+			inputs.ReadAll()
+
+			params = run.PathCommandParams{
+				Method:      method,
+				FileName:    inputs.GetFileName(),
+				OperationID: inputs.GetOperationID(),
+				Summary:     inputs.GetSummary(),
+				Description: inputs.GetDescription(),
+				Tags:        inputs.GetTags(),
+				Security:    methods.GetSecurity(inputs.GetSecurity()),
+				RequestBody: inputs.GetRequestBody(),
+				Parameters:  inputs.GetParameters(),
+				Responses:   inputs.GetResponses(),
+			}
 		}
 
 		run.PathCommandHandler(params, dir)

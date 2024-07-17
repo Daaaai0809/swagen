@@ -42,6 +42,9 @@ func PathCommandHandler(params PathCommandParams, dir string) error {
 
 		s = methods.NewPutPathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.RequestBody, params.Parameters, params.Responses)
 	case constant.DELETE_FILE:
+		path = fmt.Sprintf("%s/%s", c.GetPathDir(), dir)
+
+		s = methods.NewDeletePathSchema(params.OperationID, params.Summary, params.Description, params.Tags, params.Security, params.RequestBody, params.Parameters, params.Responses)
 	default:
 		return fmt.Errorf("invalid command: %s", params.Method)
 	}
