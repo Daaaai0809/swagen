@@ -55,6 +55,9 @@ jobs:
 
       - name: Copy binary files to head of repository
         run: |
+          if [ -d $GITHUB_WORKSPACE/swagen ]; then
+            rm -rf $GITHUB_WORKSPACE/swagen
+          fi
           cp swagen $GITHUB_WORKSPACE
 
       - name: Configure Git
