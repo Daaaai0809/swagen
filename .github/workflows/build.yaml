@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: swagen
-          path: path/to/artifacts/*
+          path: swagen
 
   create-pr:
     needs: build
@@ -52,11 +52,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: swagen
-          path: artifacts
 
       - name: Copy binary files to head of repository
         run: |
-          cp -r artifacts/* .
+          cp swagen $GITHUB_WORKSPACE
 
       - name: Configure Git
         run: |
