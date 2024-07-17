@@ -52,11 +52,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: swagen
-          path: ./artifacts
+          path: artifacts
 
-      - name: Copy binary files to repository
+      - name: Copy binary files to head of repository
         run: |
-          cp -r ./artifacts/swagen .
+          cp -r artifacts/* .
 
       - name: Configure Git
         run: |
