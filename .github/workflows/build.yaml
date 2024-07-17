@@ -54,14 +54,6 @@ jobs:
           name: swagen
           path: .
 
-      - name: Copy binary files to head of repository
-        run: |
-          if [ -f $GITHUB_WORKSPACE/swagen ]; then
-            rm -f $GITHUB_WORKSPACE/swagen
-          fi
-
-          cp ./swagen $GITHUB_WORKSPACE
-
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
