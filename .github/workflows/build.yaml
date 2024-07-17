@@ -68,7 +68,7 @@ jobs:
           fi
           git add swagen
           git commit -m "Update binary files from artifact"
-          git push origin -u update-binary-files
+          git push origin update-binary-files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
