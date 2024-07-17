@@ -55,10 +55,11 @@ jobs:
 
       - name: Copy binary files to head of repository
         run: |
-          if [ -d $GITHUB_WORKSPACE/swagen ]; then
-            rm -rf $GITHUB_WORKSPACE/swagen
+          if [ -f $GITHUB_WORKSPACE/swagen ]; then
+            rm -f $GITHUB_WORKSPACE/swagen
           fi
-          cp swagen $GITHUB_WORKSPACE
+
+          cp ./swagen $GITHUB_WORKSPACE
 
       - name: Configure Git
         run: |
