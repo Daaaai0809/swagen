@@ -1,4 +1,4 @@
-name: generate build file
+name: Generate and Update Build File
 
 on:
   pull_request:
@@ -9,6 +9,7 @@ on:
     
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -17,63 +18,75 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.21
+
       - name: Run go mod tidy
         run: go mod tidy
+
       - name: Run go build
         run: go build -o swagen
+
       - name: Run go test
         run: go test ./...
+
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
           name: swagen
-          path: ./
-  
-  update-main:
+          path: ./swagen
+
+  create-pr:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: swagen
-        path: ./artifacts
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: swagen
+          path: ./artifacts
 
-    - name: Copy artifact files to repo
-      run: |
-        cp -r ./artifacts/* .
+      - name: Copy artifact files to repo
+        run: |
+          cp -r ./artifacts/* .
 
-    - name: Set repository
-      run: |
-        git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-    - name: Configure Git
-      run: |
-        git config --global user.name "{$GITHUB_ACTOR}"
-        git config --global user.email "{$GITHUB_ACTOR}@users.noreply.github.com"
+      - name: Create new branch
+        run: |
+          git checkout -b update-binary-files
+          git add .
+          git commit -m "Update binary files from artifact"
+          git push origin update-binary-files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Commit changes
-      run: |
-        git add .
-        git commit -m "Update files from artifact"
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update files from artifact"
+          branch: update-binary-files
+          title: "Update binary files from artifact"
+          body: "This PR was created automatically by GitHub Actions."
+          base: main
 
-    - name: Push changes
-      run: |
-        git push origin main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-# This workflow will run only on pull requests to the main branch.
-# It will build the project, run go test, and generate a binary called swagen.
-# The binary will be available in the root of the repository.
-# The binary can be downloaded from the Actions tab in the GitHub repository.
-# The binary can be used to generate Swagger documentation for Go projects.
+      - name: Auto-merge PR
+        uses: pascalgn/automerge-action@v0.14.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          merge-method: squash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
