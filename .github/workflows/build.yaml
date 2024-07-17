@@ -2,11 +2,14 @@ name: generate build file
 
 on:
   pull_request:
+    types:
+      - closed
     branches:
-      - 'main'
+      - main
     
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -25,6 +28,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: swagen
+          path: ./
 
 # This workflow will run only on pull requests to the main branch.
 # It will build the project, run go test, and generate a binary called swagen.
