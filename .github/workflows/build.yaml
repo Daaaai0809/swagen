@@ -29,6 +29,39 @@ jobs:
         with:
           name: swagen
           path: ./
+  
+  update-main:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: my-artifact
+        path: ./artifacts
+
+    - name: Copy artifact files to repo
+      run: |
+        cp -r ./artifacts/* .
+
+    - name: Configure Git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Commit changes
+      run: |
+        git add .
+        git commit -m "Update files from artifact"
+
+    - name: Push changes
+      run: |
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # This workflow will run only on pull requests to the main branch.
 # It will build the project, run go test, and generate a binary called swagen.
