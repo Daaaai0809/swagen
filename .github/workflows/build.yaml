@@ -66,21 +66,20 @@ jobs:
           else
             git checkout -b update-binary-files
           fi
-          git add .
+          git add swagen
           git commit -m "Update binary files from artifact"
-          git push origin update-binary-files
+          git push origin -u update-binary-files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Pull Request
-        id: create_pr
-        uses: peter-evans/create-pull-request@v4
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update files from artifact"
+          commit-message: Update binary files from artifact
+          title: Update binary files from artifact
+          delete-branch: true
           branch: update-binary-files
-          title: "Update binary files from artifact"
-          body: "This PR was created automatically by GitHub Actions."
           base: main
 
       - name: Auto-merge PR
