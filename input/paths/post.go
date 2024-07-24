@@ -11,13 +11,13 @@ import (
 )
 
 type PostPathInputs struct {
-	RootInputs
+	RootPathInputs
 	RequestBody methods.RequestBody
 }
 
 func NewPostPathInputs(cmd *cobra.Command) *PostPathInputs {
 	return &PostPathInputs{
-		RootInputs: RootInputs{
+		RootPathInputs: RootPathInputs{
 			Cmd:         cmd,
 			FileName:    "",
 			OperationID: "",

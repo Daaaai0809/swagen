@@ -37,7 +37,7 @@ type IRootInputs interface {
 	GetResponses() methods.Responses
 }
 
-type RootInputs struct {
+type RootPathInputs struct {
 	Cmd         *cobra.Command
 	FileName    string
 	OperationID string
@@ -49,16 +49,16 @@ type RootInputs struct {
 	Responses   methods.Responses
 }
 
-func (p *RootInputs) SetFileName(fileName string) {
+func (p *RootPathInputs) SetFileName(fileName string) {
 	p.FileName = fileName
 }
 
-func (p *RootInputs) GetFileName() string {
+func (p *RootPathInputs) GetFileName() string {
 	return p.FileName
 }
 
 // The ReadFileName method takes input from the CLI to define the file name for the endpoint.
-func (p *RootInputs) ReadFileName() {
+func (p *RootPathInputs) ReadFileName() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the file name: ")
@@ -68,16 +68,16 @@ func (p *RootInputs) ReadFileName() {
 	p.SetFileName(scanner.Text())
 }
 
-func (p *RootInputs) SetOperationID(operationID string) {
+func (p *RootPathInputs) SetOperationID(operationID string) {
 	p.OperationID = operationID
 }
 
-func (p *RootInputs) GetOperationID() string {
+func (p *RootPathInputs) GetOperationID() string {
 	return p.OperationID
 }
 
 // The ReadOperationID method takes input from the CLI to define the operation ID for the endpoint.
-func (p *RootInputs) ReadOperationID() {
+func (p *RootPathInputs) ReadOperationID() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the operation ID: ")
@@ -87,16 +87,16 @@ func (p *RootInputs) ReadOperationID() {
 	p.SetOperationID(scanner.Text())
 }
 
-func (p *RootInputs) SetSummary(summary string) {
+func (p *RootPathInputs) SetSummary(summary string) {
 	p.Summary = summary
 }
 
-func (p *RootInputs) GetSummary() string {
+func (p *RootPathInputs) GetSummary() string {
 	return p.Summary
 }
 
 // The ReadSummary method takes input from the CLI to define a summary for the endpoint.
-func (p *RootInputs) ReadSummary() {
+func (p *RootPathInputs) ReadSummary() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the summary: ")
@@ -106,16 +106,16 @@ func (p *RootInputs) ReadSummary() {
 	p.SetSummary(scanner.Text())
 }
 
-func (p *RootInputs) SetDescription(description string) {
+func (p *RootPathInputs) SetDescription(description string) {
 	p.Description = description
 }
 
-func (p *RootInputs) GetDescription() string {
+func (p *RootPathInputs) GetDescription() string {
 	return p.Description
 }
 
 // The ReadDescription method takes input from the CLI to define the description of the endpoint.
-func (p *RootInputs) ReadDescription() {
+func (p *RootPathInputs) ReadDescription() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the description: ")
@@ -125,17 +125,17 @@ func (p *RootInputs) ReadDescription() {
 	p.SetDescription(scanner.Text())
 }
 
-func (p *RootInputs) SetTags(tags []string) {
+func (p *RootPathInputs) SetTags(tags []string) {
 	p.Tags = tags
 }
 
-func (p *RootInputs) GetTags() []string {
+func (p *RootPathInputs) GetTags() []string {
 	return p.Tags
 }
 
 // The ReadTags method takes input from the CLI to define tags for the endpoint.
 // It supports multiple tags.
-func (p *RootInputs) ReadTags() {
+func (p *RootPathInputs) ReadTags() {
 	var tags = make([]string, 0)
 
 	scaanner := bufio.NewScanner(os.Stdin)
@@ -157,17 +157,17 @@ func (p *RootInputs) ReadTags() {
 	p.SetTags(tags)
 }
 
-func (p *RootInputs) SetSecurity(security []string) {
+func (p *RootPathInputs) SetSecurity(security []string) {
 	p.Security = security
 }
 
-func (p *RootInputs) GetSecurity() []string {
+func (p *RootPathInputs) GetSecurity() []string {
 	return p.Security
 }
 
 // The ReadSecurity method takes input from the CLI to define the security methods required for the endpoint.
 // It supports multiple security methods.
-func (p *RootInputs) ReadSecurity() {
+func (p *RootPathInputs) ReadSecurity() {
 	var securities = make([]string, 0)
 
 	for {
@@ -187,17 +187,17 @@ func (p *RootInputs) ReadSecurity() {
 	p.SetSecurity(securities)
 }
 
-func (p *RootInputs) SetParameters(parameters methods.Parameters) {
+func (p *RootPathInputs) SetParameters(parameters methods.Parameters) {
 	p.Parameters = parameters
 }
 
-func (p *RootInputs) GetParameters() methods.Parameters {
+func (p *RootPathInputs) GetParameters() methods.Parameters {
 	return p.Parameters
 }
 
 // The ReadParameter method takes input from the CLI to define URL parameters.
 // It supports parameter definitions on the CLI as well as definitions in other files using Ref.
-func (p *RootInputs) ReadParameters() {
+func (p *RootPathInputs) ReadParameters() {
 	var parameters = make(methods.Parameters, 0)
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -278,17 +278,17 @@ func (p *RootInputs) ReadParameters() {
 	p.SetParameters(parameters)
 }
 
-func (p *RootInputs) SetResponses(responses methods.Responses) {
+func (p *RootPathInputs) SetResponses(responses methods.Responses) {
 	p.Responses = responses
 }
 
-func (p *RootInputs) GetResponses() methods.Responses {
+func (p *RootPathInputs) GetResponses() methods.Responses {
 	return p.Responses
 }
 
 // The ReadResponses method takes input to define the response methods returned by the endpoint for each response code.
 // Currently, it only supports the Ref schema in Content Parameter, but we plan to support response type definitions on the CLI in the future.
-func (p *RootInputs) ReadResponses() {
+func (p *RootPathInputs) ReadResponses() {
 	var responses = make(methods.Responses)
 
 	scanner := bufio.NewScanner(os.Stdin)

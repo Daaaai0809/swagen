@@ -7,12 +7,12 @@ import (
 )
 
 type GetPathInputs struct {
-	RootInputs
+	RootPathInputs
 }
 
 func NewGetPathInputs(cmd *cobra.Command) *GetPathInputs {
 	return &GetPathInputs{
-		RootInputs: RootInputs{
+		RootPathInputs: RootPathInputs{
 			Cmd:         cmd,
 			FileName:    "",
 			OperationID: "",

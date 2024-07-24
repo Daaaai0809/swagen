@@ -11,13 +11,13 @@ import (
 )
 
 type DeletePathInputs struct {
-	RootInputs
+	RootPathInputs
 	RequestBody methods.RequestBody
 }
 
 func NewDeletePathInputs(cmd *cobra.Command) *DeletePathInputs {
 	return &DeletePathInputs{
-		RootInputs: RootInputs{
+		RootPathInputs: RootPathInputs{
 			Cmd:         cmd,
 			FileName:    "",
 			OperationID: "",
