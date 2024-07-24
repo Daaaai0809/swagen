@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/Daaaai0809/swagen/constant"
-	"github.com/Daaaai0809/swagen/generate/methods"
+	"github.com/Daaaai0809/swagen/generate"
 	input "github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
 )
@@ -30,11 +30,11 @@ type IRootInputs interface {
 	SetSecurity([]string)
 	GetSecurity() []string
 	ReadSecurity()
-	SetParameters(methods.Parameters)
-	GetParameters() methods.Parameters
+	SetParameters(generate.Parameters)
+	GetParameters() generate.Parameters
 	ReadParameters()
-	SetResponses(methods.Responses)
-	GetResponses() methods.Responses
+	SetResponses(generate.Responses)
+	GetResponses() generate.Responses
 }
 
 type RootPathInputs struct {
@@ -45,8 +45,8 @@ type RootPathInputs struct {
 	Description string
 	Tags        []string
 	Security    []string
-	Parameters  methods.Parameters
-	Responses   methods.Responses
+	Parameters  generate.Parameters
+	Responses   generate.Responses
 }
 
 func (p *RootPathInputs) SetFileName(fileName string) {
@@ -165,8 +165,8 @@ func (p *RootPathInputs) GetSecurity() []string {
 	return p.Security
 }
 
-// The ReadSecurity method takes input from the CLI to define the security methods required for the endpoint.
-// It supports multiple security methods.
+// The ReadSecurity method takes input from the CLI to define the security generate required for the endpoint.
+// It supports multiple security generate.
 func (p *RootPathInputs) ReadSecurity() {
 	var securities = make([]string, 0)
 
@@ -187,30 +187,30 @@ func (p *RootPathInputs) ReadSecurity() {
 	p.SetSecurity(securities)
 }
 
-func (p *RootPathInputs) SetParameters(parameters methods.Parameters) {
+func (p *RootPathInputs) SetParameters(parameters generate.Parameters) {
 	p.Parameters = parameters
 }
 
-func (p *RootPathInputs) GetParameters() methods.Parameters {
+func (p *RootPathInputs) GetParameters() generate.Parameters {
 	return p.Parameters
 }
 
 // The ReadParameter method takes input from the CLI to define URL parameters.
 // It supports parameter definitions on the CLI as well as definitions in other files using Ref.
 func (p *RootPathInputs) ReadParameters() {
-	var parameters = make(methods.Parameters, 0)
+	var parameters = make(generate.Parameters, 0)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
 		if ok := input.YesNoPrompt(p.Cmd, "Ref Parameter?"); ok {
-			var parameter methods.RefParameter
+			var parameter generate.RefParameter
 
 			p.Cmd.Println("Enter the Ref: ")
 
 			scanner.Scan()
 
-			parameter = methods.RefParameter(scanner.Text())
+			parameter = generate.RefParameter(scanner.Text())
 
 			parameters = append(parameters, &parameter)
 
@@ -221,7 +221,7 @@ func (p *RootPathInputs) ReadParameters() {
 			continue
 		}
 
-		var parameter = methods.Parameter{
+		var parameter = generate.Parameter{
 			Schema: make(map[string]string),
 		}
 
@@ -278,23 +278,23 @@ func (p *RootPathInputs) ReadParameters() {
 	p.SetParameters(parameters)
 }
 
-func (p *RootPathInputs) SetResponses(responses methods.Responses) {
+func (p *RootPathInputs) SetResponses(responses generate.Responses) {
 	p.Responses = responses
 }
 
-func (p *RootPathInputs) GetResponses() methods.Responses {
+func (p *RootPathInputs) GetResponses() generate.Responses {
 	return p.Responses
 }
 
-// The ReadResponses method takes input to define the response methods returned by the endpoint for each response code.
+// The ReadResponses method takes input to define the response generate returned by the endpoint for each response code.
 // Currently, it only supports the Ref schema in Content Parameter, but we plan to support response type definitions on the CLI in the future.
 func (p *RootPathInputs) ReadResponses() {
-	var responses = make(methods.Responses)
+	var responses = make(generate.Responses)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
-		var response methods.Response
+		var response generate.Response
 
 		statusCode, err := input.SingleSelect("Select the status code", constant.StatusCodesList)
 		if err != nil {
@@ -318,20 +318,20 @@ func (p *RootPathInputs) ReadResponses() {
 
 			scanner.Scan()
 
-			response.Content = map[string]methods.Content{
+			response.Content = map[string]generate.Content{
 				contentType: {
-					Schema: methods.ContentSchema{
-						&methods.RefSchema{
+					Schema: generate.ContentSchema{
+						&generate.RefSchema{
 							Ref: scanner.Text(),
 						},
 					},
 				},
 			}
 		} else {
-			// TODO: Implement Defination of Schema with methods.Schema
-			response.Content = map[string]methods.Content{
+			// TODO: Implement Defination of Schema with generate.Schema
+			response.Content = map[string]generate.Content{
 				contentType: {
-					Schema: methods.ContentSchema{},
+					Schema: generate.ContentSchema{},
 				},
 			}
 		}

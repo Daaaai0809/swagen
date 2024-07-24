@@ -57,35 +57,35 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 		Summary:     "Summary",
 		Description: "Description",
 		Tags:        []string{"tag1", "tag2"},
-		Security: []methods.Security{
+		Security: []generate.Security{
 			{
 				"bearer": {},
 			},
 		},
-		Parameters: methods.Parameters{
-			&methods.Parameter{
+		Parameters: generate.Parameters{
+			&generate.Parameter{
 				Name:        "param1",
 				In:          "query",
 				Description: "Parameter 1",
 				Required:    true,
-				Schema: methods.ParameterSchema{
+				Schema: generate.ParameterSchema{
 					"type":   "string",
 					"format": "format",
 				},
 			},
 		},
-		Responses: methods.Responses{
-			"200": methods.Response{
+		Responses: generate.Responses{
+			"200": generate.Response{
 				Description: "OK",
-				Content: map[string]methods.Content{
+				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: methods.ContentSchema{
-							&methods.RefSchema{
+						Schema: generate.ContentSchema{
+							&generate.RefSchema{
 								Ref: "#/components/schemas/Response",
 							},
-							&methods.Schema{
+							&generate.Schema{
 								Type: "object",
-								Properties: map[string]methods.Schema{
+								Properties: map[string]generate.Schema{
 									"property1": {
 										Type: "string",
 									},
@@ -112,35 +112,35 @@ func TestGenerateYamlFile(t *testing.T) {
 		Summary:     "Summary",
 		Description: "Description",
 		Tags:        []string{"tag1", "tag2"},
-		Security: []methods.Security{
+		Security: []generate.Security{
 			{
 				"bearer": {},
 			},
 		},
-		Parameters: methods.Parameters{
-			&methods.Parameter{
+		Parameters: generate.Parameters{
+			&generate.Parameter{
 				Name:        "param1",
 				In:          "query",
 				Description: "Parameter 1",
 				Required:    true,
-				Schema: methods.ParameterSchema{
+				Schema: generate.ParameterSchema{
 					"Type":   "string",
 					"Format": "format",
 				},
 			},
 		},
-		Responses: methods.Responses{
-			"200": methods.Response{
+		Responses: generate.Responses{
+			"200": generate.Response{
 				Description: "OK",
-				Content: map[string]methods.Content{
+				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: methods.ContentSchema{
-							&methods.RefSchema{
+						Schema: generate.ContentSchema{
+							&generate.RefSchema{
 								Ref: "#/components/schemas/Response",
 							},
-							&methods.Schema{
+							&generate.Schema{
 								Type: "object",
-								Properties: map[string]methods.Schema{
+								Properties: map[string]generate.Schema{
 									"property1": {
 										Type: "string",
 									},
@@ -197,35 +197,35 @@ func TestGenerateYamlFileWithInvalidPath(t *testing.T) {
 		Summary:     "Summary",
 		Description: "Description",
 		Tags:        []string{"tag1", "tag2"},
-		Security: []methods.Security{
+		Security: []generate.Security{
 			{
 				"bearer": {},
 			},
 		},
-		Parameters: methods.Parameters{
-			&methods.Parameter{
+		Parameters: generate.Parameters{
+			&generate.Parameter{
 				Name:        "param1",
 				In:          "query",
 				Description: "Parameter 1",
 				Required:    true,
-				Schema: methods.ParameterSchema{
+				Schema: generate.ParameterSchema{
 					"type":   "string",
 					"format": "format",
 				},
 			},
 		},
-		Responses: methods.Responses{
-			"200": methods.Response{
+		Responses: generate.Responses{
+			"200": generate.Response{
 				Description: "OK",
-				Content: map[string]methods.Content{
+				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: methods.ContentSchema{
-							&methods.RefSchema{
+						Schema: generate.ContentSchema{
+							&generate.RefSchema{
 								Ref: "#/components/schemas/Response",
 							},
-							&methods.Schema{
+							&generate.Schema{
 								Type: "object",
-								Properties: map[string]methods.Schema{
+								Properties: map[string]generate.Schema{
 									"property1": {
 										Type: "string",
 									},

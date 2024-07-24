@@ -5,14 +5,14 @@ import (
 	"os"
 
 	"github.com/Daaaai0809/swagen/constant"
-	"github.com/Daaaai0809/swagen/generate/methods"
+	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
 )
 
 type PostPathInputs struct {
 	RootPathInputs
-	RequestBody methods.RequestBody
+	RequestBody generate.RequestBody
 }
 
 func NewPostPathInputs(cmd *cobra.Command) *PostPathInputs {
@@ -25,10 +25,10 @@ func NewPostPathInputs(cmd *cobra.Command) *PostPathInputs {
 			Description: "",
 			Tags:        []string{},
 			Security:    []string{},
-			Parameters:  methods.Parameters{},
-			Responses:   methods.Responses{},
+			Parameters:  generate.Parameters{},
+			Responses:   generate.Responses{},
 		},
-		RequestBody: methods.RequestBody{},
+		RequestBody: generate.RequestBody{},
 	}
 }
 
@@ -66,21 +66,21 @@ func (p *PostPathInputs) ReadAll() {
 	}
 }
 
-func (p *PostPathInputs) SetRequestBody(requestBody methods.RequestBody) {
+func (p *PostPathInputs) SetRequestBody(requestBody generate.RequestBody) {
 	p.RequestBody = requestBody
 }
 
-func (p *PostPathInputs) GetRequestBody() methods.RequestBody {
+func (p *PostPathInputs) GetRequestBody() generate.RequestBody {
 	return p.RequestBody
 }
 
 // The ReadRequestBody method takes input from the CLI to define the request body for the endpoint.
 func (p *PostPathInputs) ReadRequestBody() {
-	requestBody := methods.RequestBody{}
+	requestBody := generate.RequestBody{}
 
 	scanner := bufio.NewScanner(os.Stdin)
 
-	requestBody.Content = make(map[string]methods.Content)
+	requestBody.Content = make(map[string]generate.Content)
 
 	p.Cmd.Println("Enter the description: ")
 
@@ -94,13 +94,13 @@ func (p *PostPathInputs) ReadRequestBody() {
 		return
 	}
 
-	content := methods.Content{
-		Schema: methods.ContentSchema{},
+	content := generate.Content{
+		Schema: generate.ContentSchema{},
 	}
 
 	for {
 		if ok := input.YesNoPrompt(p.Cmd, "Do you want to add a ref?"); ok {
-			refSchema := methods.RefSchema{}
+			refSchema := generate.RefSchema{}
 
 			p.Cmd.Println("Enter the ref: ")
 
@@ -110,7 +110,7 @@ func (p *PostPathInputs) ReadRequestBody() {
 
 			content.Schema = append(content.Schema, &refSchema)
 		} else {
-			schema := methods.Schema{}
+			schema := generate.Schema{}
 
 			if t, err := input.SingleSelect("Select the type", constant.SchemaTypeList); err == nil {
 				schema.Type = t

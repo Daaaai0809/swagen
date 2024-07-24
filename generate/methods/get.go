@@ -1,6 +1,7 @@
 package methods
 
 import (
+	"github.com/Daaaai0809/swagen/generate"
 	"gopkg.in/yaml.v2"
 )
 
@@ -9,9 +10,9 @@ type GetPathSchema struct {
 	Summary     string     `yaml:"summary,omitempty"`
 	Description string     `yaml:"description,omitempty"`
 	Tags        []string   `yaml:"tags,omitempty"`
-	Security    []Security `yaml:"security,omitempty"`
-	Parameters  Parameters `yaml:"parameters,omitempty"`
-	Responses   Responses  `yaml:"responses"`
+	Security    []generate.Security `yaml:"security,omitempty"`
+	Parameters  generate.Parameters `yaml:"parameters,omitempty"`
+	Responses   generate.Responses  `yaml:"responses"`
 }
 
 func (p *GetPathSchema) ToYaml() (string, error) {
@@ -27,15 +28,15 @@ func (p *GetPathSchema) ToYaml() (string, error) {
 	return string(yamlBytes), nil
 }
 
-func NewGetPathSchema(operationID, summary, description string, tags []string, security []Security, parameters Parameters, responses Responses) *GetPathSchema {
+func NewGetPathSchema(operationID, summary, description string, tags []string, security []generate.Security, parameters generate.Parameters, responses generate.Responses) *GetPathSchema {
 	if len(responses) == 0 {
-		responses = Responses{
-			"200": Response{
+		responses = generate.Responses{
+			"200": generate.Response{
 				Description: "successful operation",
-				Content: map[string]Content{
+				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: ContentSchema{
-							&RefSchema{
+						Schema: generate.ContentSchema{
+							&generate.RefSchema{
 								Ref: "#/components/schemas/Response",
 							},
 						},

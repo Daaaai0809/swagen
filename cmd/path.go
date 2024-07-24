@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/Daaaai0809/swagen/cmd/run"
 	"github.com/Daaaai0809/swagen/constant"
-	"github.com/Daaaai0809/swagen/generate/methods"
+	"github.com/Daaaai0809/swagen/generate"
 	input_path "github.com/Daaaai0809/swagen/input/paths"
 	"github.com/spf13/cobra"
 )
@@ -39,7 +39,7 @@ var pathCommand = &cobra.Command{
 				Summary:     inputs.GetSummary(),
 				Description: inputs.GetDescription(),
 				Tags:        inputs.GetTags(),
-				Security:    methods.GetSecurity(inputs.GetSecurity()),
+				Security:    generate.GetSecurity(inputs.GetSecurity()),
 				Parameters:  inputs.GetParameters(),
 				Responses:   inputs.GetResponses(),
 			}
@@ -54,7 +54,7 @@ var pathCommand = &cobra.Command{
 				Summary:     inputs.GetSummary(),
 				Description: inputs.GetDescription(),
 				Tags:        inputs.GetTags(),
-				Security:    methods.GetSecurity(inputs.GetSecurity()),
+				Security:    generate.GetSecurity(inputs.GetSecurity()),
 				RequestBody: inputs.GetRequestBody(),
 				Parameters:  inputs.GetParameters(),
 				Responses:   inputs.GetResponses(),
@@ -70,7 +70,7 @@ var pathCommand = &cobra.Command{
 				Summary:     inputs.GetSummary(),
 				Description: inputs.GetDescription(),
 				Tags:        inputs.GetTags(),
-				Security:    methods.GetSecurity(inputs.GetSecurity()),
+				Security:    generate.GetSecurity(inputs.GetSecurity()),
 				RequestBody: inputs.GetRequestBody(),
 				Parameters:  inputs.GetParameters(),
 				Responses:   inputs.GetResponses(),
@@ -86,7 +86,7 @@ var pathCommand = &cobra.Command{
 				Summary:     inputs.GetSummary(),
 				Description: inputs.GetDescription(),
 				Tags:        inputs.GetTags(),
-				Security:    methods.GetSecurity(inputs.GetSecurity()),
+				Security:    generate.GetSecurity(inputs.GetSecurity()),
 				RequestBody: inputs.GetRequestBody(),
 				Parameters:  inputs.GetParameters(),
 				Responses:   inputs.GetResponses(),

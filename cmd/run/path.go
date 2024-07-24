@@ -16,10 +16,10 @@ type PathCommandParams struct {
 	Summary     string
 	Description string
 	Tags        []string
-	Security    []methods.Security
-	RequestBody methods.RequestBody
-	Parameters  methods.Parameters
-	Responses   methods.Responses
+	Security    []generate.Security
+	RequestBody generate.RequestBody
+	Parameters  generate.Parameters
+	Responses   generate.Responses
 }
 
 func PathCommandHandler(params PathCommandParams, dir string) error {

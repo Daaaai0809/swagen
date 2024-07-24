@@ -1,6 +1,7 @@
 package methods
 
 import (
+	"github.com/Daaaai0809/swagen/generate"
 	"gopkg.in/yaml.v2"
 )
 
@@ -9,13 +10,13 @@ type PostPathSchema struct {
 	Summary     string      `yaml:"summary,omitempty"`
 	Description string      `yaml:"description,omitempty"`
 	Tags        []string    `yaml:"tags,omitempty"`
-	Security    []Security  `yaml:"security,omitempty"`
-	RequestBody RequestBody `yaml:"requestBody,omitempty"`
-	Parameters  Parameters  `yaml:"parameters,omitempty"`
-	Responses   Responses   `yaml:"responses"`
+	Security    []generate.Security  `yaml:"security,omitempty"`
+	RequestBody generate.RequestBody `yaml:"requestBody,omitempty"`
+	Parameters  generate.Parameters  `yaml:"parameters,omitempty"`
+	Responses   generate.Responses   `yaml:"responses"`
 }
 
-func NewPostPathSchema(operationID, summary, description string, tags []string, security []Security, requestBody RequestBody, parameters Parameters, responses Responses) *PostPathSchema {
+func NewPostPathSchema(operationID, summary, description string, tags []string, security []generate.Security, requestBody generate.RequestBody, parameters generate.Parameters, responses generate.Responses) *PostPathSchema {
 	return &PostPathSchema{
 		OperationID: operationID,
 		Summary:     summary,

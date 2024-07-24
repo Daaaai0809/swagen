@@ -1,7 +1,7 @@
 package path
 
 import (
-	"github.com/Daaaai0809/swagen/generate/methods"
+	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
 )
@@ -20,8 +20,8 @@ func NewGetPathInputs(cmd *cobra.Command) *GetPathInputs {
 			Description: "",
 			Tags:        []string{},
 			Security:    []string{},
-			Parameters:  methods.Parameters{},
-			Responses:   methods.Responses{},
+			Parameters:  generate.Parameters{},
+			Responses:   generate.Responses{},
 		},
 	}
 }
