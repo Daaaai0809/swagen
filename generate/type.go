@@ -62,6 +62,14 @@ func (r *RefSchema) GetString() string {
 	return r.Ref
 }
 
+func (r *RefSchema) ReadRef(cmd *cobra.Command, scanner *bufio.Scanner) {
+	cmd.Println("Enter the Ref: ")
+
+	scanner.Scan()
+
+	r.Ref = scanner.Text()
+}
+
 type RequestBody struct {
 	Description string             `yaml:"description"`
 	Content     map[string]Content `yaml:"content"`
@@ -69,6 +77,14 @@ type RequestBody struct {
 
 func (r *RequestBody) GetString() string {
 	return ""
+}
+
+func (r *RequestBody) ReadDescription(cmd *cobra.Command, scanner *bufio.Scanner) {
+	cmd.Println("Enter the request body description: ")
+
+	scanner.Scan()
+
+	r.Description = scanner.Text()
 }
 
 type Schema struct {
@@ -85,6 +101,14 @@ type Schema struct {
 func (s *Schema) GetString() string {
 	// TODO: Return Example
 	return ""
+}
+
+func (s *Schema) ReadType(cmd *cobra.Command) {
+	if t, err := input.SingleSelect("Select the type", constant.SchemaTypeList); err == nil {
+		s.Type = t
+	} else {
+		cmd.Println(err)
+	}
 }
 
 func (s *Schema) ReadFormat(cmd *cobra.Command, t string) {

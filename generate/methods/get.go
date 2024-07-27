@@ -6,10 +6,10 @@ import (
 )
 
 type GetPathSchema struct {
-	OperationID string     `yaml:"operationId"`
-	Summary     string     `yaml:"summary,omitempty"`
-	Description string     `yaml:"description,omitempty"`
-	Tags        []string   `yaml:"tags,omitempty"`
+	OperationID string              `yaml:"operationId"`
+	Summary     string              `yaml:"summary,omitempty"`
+	Description string              `yaml:"description,omitempty"`
+	Tags        []string            `yaml:"tags,omitempty"`
 	Security    []generate.Security `yaml:"security,omitempty"`
 	Parameters  generate.Parameters `yaml:"parameters,omitempty"`
 	Responses   generate.Responses  `yaml:"responses"`

@@ -6,10 +6,10 @@ import (
 )
 
 type PostPathSchema struct {
-	OperationID string      `yaml:"operationId"`
-	Summary     string      `yaml:"summary,omitempty"`
-	Description string      `yaml:"description,omitempty"`
-	Tags        []string    `yaml:"tags,omitempty"`
+	OperationID string               `yaml:"operationId"`
+	Summary     string               `yaml:"summary,omitempty"`
+	Description string               `yaml:"description,omitempty"`
+	Tags        []string             `yaml:"tags,omitempty"`
 	Security    []generate.Security  `yaml:"security,omitempty"`
 	RequestBody generate.RequestBody `yaml:"requestBody,omitempty"`
 	Parameters  generate.Parameters  `yaml:"parameters,omitempty"`

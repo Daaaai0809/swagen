@@ -10,31 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type IRootInputs interface {
+type IPathInputs interface {
 	ReadAll()
-	SetFileName(string)
-	GetFileName() string
-	ReadFileName()
-	SetOperationID(string)
-	GetOperationID() string
-	ReadOperationID()
-	SetSummary(string)
-	GetSummary() string
-	ReadSummary()
-	SetDescription(string)
-	GetDescription() string
-	ReadDescription()
-	SetTags([]string)
-	GetTags() []string
-	ReadTags()
-	SetSecurity([]string)
-	GetSecurity() []string
-	ReadSecurity()
-	SetParameters(generate.Parameters)
-	GetParameters() generate.Parameters
-	ReadParameters()
-	SetResponses(generate.Responses)
-	GetResponses() generate.Responses
 }
 
 type RootPathInputs struct {
@@ -344,4 +321,77 @@ func (p *RootPathInputs) ReadResponses() {
 	}
 
 	p.SetResponses(responses)
+}
+
+type WritePathInputs struct {
+	RootPathInputs
+	RequestBody generate.RequestBody
+}
+
+func (p *WritePathInputs) SetRequestBody(requestBody generate.RequestBody) {
+	p.RequestBody = requestBody
+}
+
+func (p *WritePathInputs) GetRequestBody() generate.RequestBody {
+	return p.RequestBody
+}
+
+// The ReadRequestBody method takes input from the CLI to define the request body for the endpoint.
+func (p *WritePathInputs) ReadRequestBody() {
+	requestBody := generate.RequestBody{}
+
+	scanner := bufio.NewScanner(os.Stdin)
+
+	requestBody.Content = make(map[string]generate.Content)
+
+	requestBody.ReadDescription(p.Cmd, scanner)
+
+	contentType, err := input.SingleSelect("Select the content type", constant.ContentTypeList)
+	if err != nil {
+		p.Cmd.Println(err)
+		return
+	}
+
+	content := generate.Content{
+		Schema: generate.ContentSchema{},
+	}
+
+	for {
+		if ok := input.YesNoPrompt(p.Cmd, "Do you want to add a ref?"); ok {
+			refSchema := generate.RefSchema{}
+
+			refSchema.ReadRef(p.Cmd, scanner)
+
+			content.Schema = append(content.Schema, &refSchema)
+		} else {
+			schema := generate.Schema{}
+
+			schema.ReadType(p.Cmd)
+
+			if schema.Type == constant.STRING_TYPE || schema.Type == constant.NUMBER_TYPE || schema.Type == constant.INTEGER_TYPE {
+				schema.ReadFormat(p.Cmd, schema.Type)
+			}
+
+			switch schema.Type {
+			case constant.OBJECT_TYPE:
+				schema.ReadProperties(p.Cmd, scanner)
+			case constant.ARRAY_TYPE:
+				schema.ReadItems(p.Cmd, scanner)
+			default:
+				if ok := input.YesNoPrompt(p.Cmd, "Is the schema nullable?"); ok {
+					schema.Nullable = true
+				}
+			}
+
+			content.Schema = append(content.Schema, &schema)
+		}
+
+		requestBody.Content[contentType] = content
+
+		if ok := input.YesNoPrompt(p.Cmd, "Do you want to add another content type?"); !ok {
+			break
+		}
+	}
+
+	p.SetRequestBody(requestBody)
 }
