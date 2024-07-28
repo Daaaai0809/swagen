@@ -1,0 +1,63 @@
+ComplexTestResponse:
+  type: object
+  properties:
+    dataObject:
+      type: object
+      properties:
+        arrayProp:
+          type: array
+          items:
+            type: object
+            properties:
+              arrayProp1:
+                type: string
+              arrayProp2:
+                type: string
+              arrayProp3:
+                type: number
+              arrayProp4:
+                type: integer
+                format: int32
+                nullable: true
+            required:
+            - arrayProp1
+            - arrayProp2
+            - arrayProp3
+            - arrayProp4
+        objProp:
+          type: object
+          properties:
+            objProp1:
+              type: string
+            objProp2:
+              type: string
+            objProp3:
+              type: number
+            objProp4:
+              type: integer
+              format: int32
+              nullable: true
+          required:
+          - objProp1
+          - objProp2
+          - objProp3
+          - objProp4
+        property1:
+          type: string
+        property2:
+          type: string
+        property3:
+          type: number
+        property4:
+          type: integer
+          format: int32
+          nullable: true
+      required:
+      - property1
+      - property2
+      - property3
+      - property4
+      - objProp
+      - arrayProp
+  required:
+  - dataObject

@@ -5,39 +5,16 @@ import (
 	"os"
 
 	"github.com/Daaaai0809/swagen/constant"
-	"github.com/Daaaai0809/swagen/generate/methods"
+	"github.com/Daaaai0809/swagen/generate"
 	input "github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
 )
 
-type IRootInputs interface {
+type IPathInputs interface {
 	ReadAll()
-	SetFileName(string)
-	GetFileName() string
-	ReadFileName()
-	SetOperationID(string)
-	GetOperationID() string
-	ReadOperationID()
-	SetSummary(string)
-	GetSummary() string
-	ReadSummary()
-	SetDescription(string)
-	GetDescription() string
-	ReadDescription()
-	SetTags([]string)
-	GetTags() []string
-	ReadTags()
-	SetSecurity([]string)
-	GetSecurity() []string
-	ReadSecurity()
-	SetParameters(methods.Parameters)
-	GetParameters() methods.Parameters
-	ReadParameters()
-	SetResponses(methods.Responses)
-	GetResponses() methods.Responses
 }
 
-type RootInputs struct {
+type RootPathInputs struct {
 	Cmd         *cobra.Command
 	FileName    string
 	OperationID string
@@ -45,20 +22,20 @@ type RootInputs struct {
 	Description string
 	Tags        []string
 	Security    []string
-	Parameters  methods.Parameters
-	Responses   methods.Responses
+	Parameters  generate.Parameters
+	Responses   generate.Responses
 }
 
-func (p *RootInputs) SetFileName(fileName string) {
+func (p *RootPathInputs) SetFileName(fileName string) {
 	p.FileName = fileName
 }
 
-func (p *RootInputs) GetFileName() string {
+func (p *RootPathInputs) GetFileName() string {
 	return p.FileName
 }
 
 // The ReadFileName method takes input from the CLI to define the file name for the endpoint.
-func (p *RootInputs) ReadFileName() {
+func (p *RootPathInputs) ReadFileName() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the file name: ")
@@ -68,16 +45,16 @@ func (p *RootInputs) ReadFileName() {
 	p.SetFileName(scanner.Text())
 }
 
-func (p *RootInputs) SetOperationID(operationID string) {
+func (p *RootPathInputs) SetOperationID(operationID string) {
 	p.OperationID = operationID
 }
 
-func (p *RootInputs) GetOperationID() string {
+func (p *RootPathInputs) GetOperationID() string {
 	return p.OperationID
 }
 
 // The ReadOperationID method takes input from the CLI to define the operation ID for the endpoint.
-func (p *RootInputs) ReadOperationID() {
+func (p *RootPathInputs) ReadOperationID() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the operation ID: ")
@@ -87,16 +64,16 @@ func (p *RootInputs) ReadOperationID() {
 	p.SetOperationID(scanner.Text())
 }
 
-func (p *RootInputs) SetSummary(summary string) {
+func (p *RootPathInputs) SetSummary(summary string) {
 	p.Summary = summary
 }
 
-func (p *RootInputs) GetSummary() string {
+func (p *RootPathInputs) GetSummary() string {
 	return p.Summary
 }
 
 // The ReadSummary method takes input from the CLI to define a summary for the endpoint.
-func (p *RootInputs) ReadSummary() {
+func (p *RootPathInputs) ReadSummary() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the summary: ")
@@ -106,16 +83,16 @@ func (p *RootInputs) ReadSummary() {
 	p.SetSummary(scanner.Text())
 }
 
-func (p *RootInputs) SetDescription(description string) {
+func (p *RootPathInputs) SetDescription(description string) {
 	p.Description = description
 }
 
-func (p *RootInputs) GetDescription() string {
+func (p *RootPathInputs) GetDescription() string {
 	return p.Description
 }
 
 // The ReadDescription method takes input from the CLI to define the description of the endpoint.
-func (p *RootInputs) ReadDescription() {
+func (p *RootPathInputs) ReadDescription() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	p.Cmd.Println("Enter the description: ")
@@ -125,17 +102,17 @@ func (p *RootInputs) ReadDescription() {
 	p.SetDescription(scanner.Text())
 }
 
-func (p *RootInputs) SetTags(tags []string) {
+func (p *RootPathInputs) SetTags(tags []string) {
 	p.Tags = tags
 }
 
-func (p *RootInputs) GetTags() []string {
+func (p *RootPathInputs) GetTags() []string {
 	return p.Tags
 }
 
 // The ReadTags method takes input from the CLI to define tags for the endpoint.
 // It supports multiple tags.
-func (p *RootInputs) ReadTags() {
+func (p *RootPathInputs) ReadTags() {
 	var tags = make([]string, 0)
 
 	scaanner := bufio.NewScanner(os.Stdin)
@@ -157,17 +134,17 @@ func (p *RootInputs) ReadTags() {
 	p.SetTags(tags)
 }
 
-func (p *RootInputs) SetSecurity(security []string) {
+func (p *RootPathInputs) SetSecurity(security []string) {
 	p.Security = security
 }
 
-func (p *RootInputs) GetSecurity() []string {
+func (p *RootPathInputs) GetSecurity() []string {
 	return p.Security
 }
 
-// The ReadSecurity method takes input from the CLI to define the security methods required for the endpoint.
-// It supports multiple security methods.
-func (p *RootInputs) ReadSecurity() {
+// The ReadSecurity method takes input from the CLI to define the security generate required for the endpoint.
+// It supports multiple security generate.
+func (p *RootPathInputs) ReadSecurity() {
 	var securities = make([]string, 0)
 
 	for {
@@ -187,30 +164,32 @@ func (p *RootInputs) ReadSecurity() {
 	p.SetSecurity(securities)
 }
 
-func (p *RootInputs) SetParameters(parameters methods.Parameters) {
+func (p *RootPathInputs) SetParameters(parameters generate.Parameters) {
 	p.Parameters = parameters
 }
 
-func (p *RootInputs) GetParameters() methods.Parameters {
+func (p *RootPathInputs) GetParameters() generate.Parameters {
 	return p.Parameters
 }
 
 // The ReadParameter method takes input from the CLI to define URL parameters.
 // It supports parameter definitions on the CLI as well as definitions in other files using Ref.
-func (p *RootInputs) ReadParameters() {
-	var parameters = make(methods.Parameters, 0)
+func (p *RootPathInputs) ReadParameters() {
+	var parameters = make(generate.Parameters, 0)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
 		if ok := input.YesNoPrompt(p.Cmd, "Ref Parameter?"); ok {
-			var parameter methods.RefParameter
+			var parameter generate.RefParameter
 
 			p.Cmd.Println("Enter the Ref: ")
 
 			scanner.Scan()
 
-			parameter = methods.RefParameter(scanner.Text())
+			parameter = generate.RefParameter{
+				Ref: scanner.Text(),
+			}
 
 			parameters = append(parameters, &parameter)
 
@@ -221,7 +200,7 @@ func (p *RootInputs) ReadParameters() {
 			continue
 		}
 
-		var parameter = methods.Parameter{
+		var parameter = generate.Parameter{
 			Schema: make(map[string]string),
 		}
 
@@ -278,23 +257,23 @@ func (p *RootInputs) ReadParameters() {
 	p.SetParameters(parameters)
 }
 
-func (p *RootInputs) SetResponses(responses methods.Responses) {
+func (p *RootPathInputs) SetResponses(responses generate.Responses) {
 	p.Responses = responses
 }
 
-func (p *RootInputs) GetResponses() methods.Responses {
+func (p *RootPathInputs) GetResponses() generate.Responses {
 	return p.Responses
 }
 
-// The ReadResponses method takes input to define the response methods returned by the endpoint for each response code.
+// The ReadResponses method takes input to define the response generate returned by the endpoint for each response code.
 // Currently, it only supports the Ref schema in Content Parameter, but we plan to support response type definitions on the CLI in the future.
-func (p *RootInputs) ReadResponses() {
-	var responses = make(methods.Responses)
+func (p *RootPathInputs) ReadResponses() {
+	var responses = make(generate.Responses)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
-		var response methods.Response
+		var response generate.Response
 
 		statusCode, err := input.SingleSelect("Select the status code", constant.StatusCodesList)
 		if err != nil {
@@ -318,20 +297,20 @@ func (p *RootInputs) ReadResponses() {
 
 			scanner.Scan()
 
-			response.Content = map[string]methods.Content{
+			response.Content = map[string]generate.Content{
 				contentType: {
-					Schema: methods.ContentSchema{
-						&methods.RefSchema{
+					Schema: generate.ContentSchema{
+						&generate.RefSchema{
 							Ref: scanner.Text(),
 						},
 					},
 				},
 			}
 		} else {
-			// TODO: Implement Defination of Schema with methods.Schema
-			response.Content = map[string]methods.Content{
+			// TODO: Implement Defination of Schema with generate.Schema
+			response.Content = map[string]generate.Content{
 				contentType: {
-					Schema: methods.ContentSchema{},
+					Schema: generate.ContentSchema{},
 				},
 			}
 		}
@@ -344,4 +323,77 @@ func (p *RootInputs) ReadResponses() {
 	}
 
 	p.SetResponses(responses)
+}
+
+type WritePathInputs struct {
+	RootPathInputs
+	RequestBody generate.RequestBody
+}
+
+func (p *WritePathInputs) SetRequestBody(requestBody generate.RequestBody) {
+	p.RequestBody = requestBody
+}
+
+func (p *WritePathInputs) GetRequestBody() generate.RequestBody {
+	return p.RequestBody
+}
+
+// The ReadRequestBody method takes input from the CLI to define the request body for the endpoint.
+func (p *WritePathInputs) ReadRequestBody() {
+	requestBody := generate.RequestBody{}
+
+	scanner := bufio.NewScanner(os.Stdin)
+
+	requestBody.Content = make(map[string]generate.Content)
+
+	requestBody.ReadDescription(p.Cmd, scanner)
+
+	contentType, err := input.SingleSelect("Select the content type", constant.ContentTypeList)
+	if err != nil {
+		p.Cmd.Println(err)
+		return
+	}
+
+	content := generate.Content{
+		Schema: generate.ContentSchema{},
+	}
+
+	for {
+		if ok := input.YesNoPrompt(p.Cmd, "Do you want to add a ref?"); ok {
+			refSchema := generate.RefSchema{}
+
+			refSchema.ReadRef(p.Cmd, scanner)
+
+			content.Schema = append(content.Schema, &refSchema)
+		} else {
+			schema := generate.Schema{}
+
+			schema.ReadType(p.Cmd)
+
+			if schema.Type == constant.STRING_TYPE || schema.Type == constant.NUMBER_TYPE || schema.Type == constant.INTEGER_TYPE {
+				schema.ReadFormat(p.Cmd, schema.Type)
+			}
+
+			switch schema.Type {
+			case constant.OBJECT_TYPE:
+				schema.ReadProperties(p.Cmd, scanner)
+			case constant.ARRAY_TYPE:
+				schema.ReadItems(p.Cmd, scanner)
+			default:
+				if ok := input.YesNoPrompt(p.Cmd, "Is the schema nullable?"); ok {
+					schema.Nullable = true
+				}
+			}
+
+			content.Schema = append(content.Schema, &schema)
+		}
+
+		requestBody.Content[contentType] = content
+
+		if ok := input.YesNoPrompt(p.Cmd, "Do you want to add another content type?"); !ok {
+			break
+		}
+	}
+
+	p.SetRequestBody(requestBody)
 }

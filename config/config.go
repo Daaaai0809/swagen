@@ -8,25 +8,25 @@ import (
 const VERSION string = "0.0.1"
 
 const (
-	PATH_DIR   = "PATH_DIR"
-	SCHEMA_DIR = "SCHEMA_DIR"
-	MODEL_DIR  = "MODEL_DIR"
+	PATH_DIR    = "PATH_DIR"
+	MESSAGE_DIR = "MESSAGE_DIR"
+	MODEL_DIR   = "MODEL_DIR"
 )
 
 var config *Config
 
 type Config struct {
-	PathDir   string
-	SchemaDir string
-	ModelDir  string
+	PathDir    string
+	MessageDir string
+	ModelDir   string
 }
 
 func (c *Config) GetPathDir() string {
 	return c.PathDir
 }
 
-func (c *Config) GetSchemaDir() string {
-	return c.SchemaDir
+func (c *Config) GetMessageDir() string {
+	return c.MessageDir
 }
 
 func (c *Config) GetModelDir() string {
@@ -34,14 +34,14 @@ func (c *Config) GetModelDir() string {
 }
 
 func NewConfig() (*Config, error) {
-	pathSchema := os.Getenv(PATH_DIR)
-	if pathSchema == "" {
+	pathMessage := os.Getenv(PATH_DIR)
+	if pathMessage == "" {
 		return nil, errors.New("PATH_DIR is not set")
 	}
 
-	schemaDir := os.Getenv(SCHEMA_DIR)
-	if schemaDir == "" {
-		return nil, errors.New("SCHEMA_DIR is not set")
+	messageDir := os.Getenv(MESSAGE_DIR)
+	if messageDir == "" {
+		return nil, errors.New("MESSAGE_DIR is not set")
 	}
 
 	modelDir := os.Getenv(MODEL_DIR)
@@ -50,9 +50,9 @@ func NewConfig() (*Config, error) {
 	}
 
 	return &Config{
-		PathDir:   pathSchema,
-		SchemaDir: schemaDir,
-		ModelDir:  modelDir,
+		PathDir:    pathMessage,
+		MessageDir: messageDir,
+		ModelDir:   modelDir,
 	}, nil
 }
 
