@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const LONG_SUMMARY = `Generate a path in the swagger yaml file.
+const LONG_SUMMARY_PATH = `Generate a path in the swagger yaml file.
 Example:
   swagen path get -d "front/users"
 `
@@ -20,7 +20,7 @@ var (
 var pathCommand = &cobra.Command{
 	Use:   "path <method>",
 	Short: "Generate a path in the swagger yaml file",
-	Long:  LONG_SUMMARY,
+	Long:  LONG_SUMMARY_PATH,
 	// TODO: Decide if we need to validate the args here or not
 	// Args:  validate.ValidatePathCommandArgs,
 	Run: func(cmd *cobra.Command, args []string) {
