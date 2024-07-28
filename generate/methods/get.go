@@ -29,23 +29,6 @@ func (p *GetPathSchema) ToYaml() (string, error) {
 }
 
 func NewGetPathSchema(operationID, summary, description string, tags []string, security []generate.Security, parameters generate.Parameters, responses generate.Responses) *GetPathSchema {
-	if len(responses) == 0 {
-		responses = generate.Responses{
-			"200": generate.Response{
-				Description: "successful operation",
-				Content: map[string]generate.Content{
-					"application/json": {
-						Schema: generate.ContentSchema{
-							&generate.RefSchema{
-								Ref: "#/components/schemas/Response",
-							},
-						},
-					},
-				},
-			},
-		}
-	}
-
 	return &GetPathSchema{
 		OperationID: operationID,
 		Summary:     summary,

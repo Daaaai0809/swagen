@@ -187,7 +187,9 @@ func (p *RootPathInputs) ReadParameters() {
 
 			scanner.Scan()
 
-			parameter = generate.RefParameter(scanner.Text())
+			parameter = generate.RefParameter{
+				Ref: scanner.Text(),
+			}
 
 			parameters = append(parameters, &parameter)
 

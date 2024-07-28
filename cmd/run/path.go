@@ -24,7 +24,7 @@ type PathCommandParams struct {
 
 func PathCommandHandler(params PathCommandParams, dir string) error {
 	var path string
-	var s generate.IPathSchema = nil
+	var s generate.ISwaggerSchema = nil
 
 	c := config.GetConfig()
 
@@ -53,7 +53,7 @@ func PathCommandHandler(params PathCommandParams, dir string) error {
 		return fmt.Errorf("do not have a empty path")
 	}
 
-	if err := generate.GeneratePathYamlFile(s, path, params.FileName); err != nil {
+	if err := generate.GenerateYamlFile(s, path, params.FileName); err != nil {
 		return err
 	}
 

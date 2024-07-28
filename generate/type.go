@@ -15,10 +15,12 @@ type IParameters interface {
 // Parameters is an alias for type Parameter or RefParameter
 type Parameters []IParameters
 
-type RefParameter string
+type RefParameter struct {
+	Ref string `yaml:"$ref"`
+}
 
 func (r *RefParameter) GetString() string {
-	return string(*r)
+	return string(r.Ref)
 }
 
 type Parameter struct {
@@ -93,9 +95,15 @@ type Schema struct {
 	Properties map[string]Schema `yaml:"properties,omitempty"`
 	Required   []string          `yaml:"required,omitempty"`
 	Nullable   bool              `yaml:"nullable,omitempty"`
+	Items      *Schema           `yaml:"items,omitempty"`
 	// TODO: Must support Example
 	// Example    interface{}               `yaml:"example,omitempty"`
-	Items map[string]Schema `yaml:"items,omitempty"`
+}
+
+func NewSchema() *Schema {
+	return &Schema{
+		Properties: make(map[string]Schema),
+	}
 }
 
 func (s *Schema) GetString() string {
@@ -185,47 +193,29 @@ func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner) {
 }
 
 func (s *Schema) ReadItems(cmd *cobra.Command, scanner *bufio.Scanner) {
-	s.Items = make(map[string]Schema)
+	s.Items = &Schema{}
 
-	for {
-		item := Schema{}
+	item := Schema{}
 
-		cmd.Println("Enter the item name: ")
+	if t, err := input.SingleSelect("Select the type", constant.SchemaTypeList); err == nil {
+		item.Type = t
+	} else {
+		cmd.Println(err)
+		return
+	}
 
-		scanner.Scan()
+	if item.Type == constant.STRING_TYPE || item.Type == constant.NUMBER_TYPE || item.Type == constant.INTEGER_TYPE {
+		item.ReadFormat(cmd, item.Type)
+	}
 
-		name := scanner.Text()
-
-		if t, err := input.SingleSelect("Select the type", constant.SchemaTypeList); err == nil {
-			item.Type = t
-		} else {
-			cmd.Println(err)
-			continue
-		}
-
-		if item.Type == constant.STRING_TYPE || item.Type == constant.NUMBER_TYPE || item.Type == constant.INTEGER_TYPE {
-			item.ReadFormat(cmd, item.Type)
-		}
-
-		switch item.Type {
-		case constant.OBJECT_TYPE:
-			item.ReadProperties(cmd, scanner)
-		case constant.ARRAY_TYPE:
-			item.ReadItems(cmd, scanner)
-		default:
-			if ok := input.YesNoPrompt(cmd, "Is the item required?"); ok {
-				s.Required = append(s.Required, name)
-			}
-
-			if ok := input.YesNoPrompt(cmd, "Is the item nullable?"); ok {
-				item.Nullable = true
-			}
-		}
-
-		s.Items[name] = item
-
-		if ok := input.YesNoPrompt(cmd, "Do you want to add another item?"); !ok {
-			break
+	switch item.Type {
+	case constant.OBJECT_TYPE:
+		item.ReadProperties(cmd, scanner)
+	case constant.ARRAY_TYPE:
+		item.ReadItems(cmd, scanner)
+	default:
+		if ok := input.YesNoPrompt(cmd, "Is the item nullable?"); ok {
+			item.Nullable = true
 		}
 	}
 }
