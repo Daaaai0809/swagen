@@ -6,11 +6,11 @@ import (
 	"strings"
 )
 
-type IPathSchema interface {
+type ISwaggerSchema interface {
 	ToYaml() (string, error)
 }
 
-func GeneratePathYamlFile(p IPathSchema, path, filename string) error {
+func GenerateYamlFile(p ISwaggerSchema, path, filename string) error {
 	yaml, err := p.ToYaml()
 	if err != nil {
 		return err
