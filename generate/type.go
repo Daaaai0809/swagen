@@ -193,9 +193,7 @@ func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner) {
 }
 
 func (s *Schema) ReadItems(cmd *cobra.Command, scanner *bufio.Scanner) {
-	s.Items = &Schema{}
-
-	item := Schema{}
+	item := &Schema{}
 
 	if t, err := input.SingleSelect("Select the type", constant.SchemaTypeList); err == nil {
 		item.Type = t
@@ -218,6 +216,8 @@ func (s *Schema) ReadItems(cmd *cobra.Command, scanner *bufio.Scanner) {
 			item.Nullable = true
 		}
 	}
+
+	s.Items = item
 }
 
 type Security = map[string][]interface{}
