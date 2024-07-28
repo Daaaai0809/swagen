@@ -1,0 +1,23 @@
+SimpleTestResponse:
+  type: object
+  properties:
+    dataObject:
+      type: object
+      properties:
+        property1:
+          type: string
+        property2:
+          type: string
+        property3:
+          type: number
+        property4:
+          type: integer
+          format: int32
+          nullable: true
+      required:
+      - property1
+      - property2
+      - property3
+      - property4
+  required:
+  - dataObject
