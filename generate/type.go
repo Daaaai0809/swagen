@@ -144,7 +144,7 @@ func (s *Schema) ReadFormat(cmd *cobra.Command, t string) {
 	}
 }
 
-func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner) {
+func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner, isModel bool) {
 	properties := make(map[string]Schema)
 
 	for {
@@ -169,11 +169,11 @@ func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner) {
 
 		switch prop.Type {
 		case constant.OBJECT_TYPE:
-			prop.ReadProperties(cmd, scanner)
+			prop.ReadProperties(cmd, scanner, isModel)
 		case constant.ARRAY_TYPE:
-			prop.ReadItems(cmd, scanner)
+			prop.ReadItems(cmd, scanner, isModel)
 		default:
-			if ok := input.YesNoPrompt(cmd, "Is the property required?"); ok {
+			if ok := input.YesNoPrompt(cmd, "Is the property required?"); ok && !isModel{
 				s.Required = append(s.Required, name)
 			}
 
@@ -192,7 +192,7 @@ func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner) {
 	s.Properties = properties
 }
 
-func (s *Schema) ReadItems(cmd *cobra.Command, scanner *bufio.Scanner) {
+func (s *Schema) ReadItems(cmd *cobra.Command, scanner *bufio.Scanner, isModel bool) {
 	item := &Schema{}
 
 	if t, err := input.SingleSelect("Select the type", constant.SchemaTypeList); err == nil {
@@ -208,9 +208,9 @@ func (s *Schema) ReadItems(cmd *cobra.Command, scanner *bufio.Scanner) {
 
 	switch item.Type {
 	case constant.OBJECT_TYPE:
-		item.ReadProperties(cmd, scanner)
+		item.ReadProperties(cmd, scanner, isModel)
 	case constant.ARRAY_TYPE:
-		item.ReadItems(cmd, scanner)
+		item.ReadItems(cmd, scanner, isModel)
 	default:
 		if ok := input.YesNoPrompt(cmd, "Is the item nullable?"); ok {
 			item.Nullable = true
