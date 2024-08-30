@@ -376,9 +376,9 @@ func (p *WritePathInputs) ReadRequestBody() {
 
 			switch schema.Type {
 			case constant.OBJECT_TYPE:
-				schema.ReadProperties(p.Cmd, scanner)
+				schema.ReadProperties(p.Cmd, scanner, false)
 			case constant.ARRAY_TYPE:
-				schema.ReadItems(p.Cmd, scanner)
+				schema.ReadItems(p.Cmd, scanner, false)
 			default:
 				if ok := input.YesNoPrompt(p.Cmd, "Is the schema nullable?"); ok {
 					schema.Nullable = true

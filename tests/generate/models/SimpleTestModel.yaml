@@ -1,0 +1,11 @@
+title: SimpleTestModel
+type: object
+properties:
+  age:
+    type: integer
+    format: int32
+  is_student:
+    type: boolean
+    nullable: true
+  name:
+    type: string

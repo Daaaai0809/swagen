@@ -175,9 +175,9 @@ func (m *MessageInputs) ReadMessageProperties() {
 		case constant.STRING_TYPE, constant.NUMBER_TYPE, constant.INTEGER_TYPE:
 			schema.ReadFormat(m.Cmd, schema.Type)
 		case constant.OBJECT_TYPE:
-			schema.ReadProperties(m.Cmd, scanner)
+			schema.ReadProperties(m.Cmd, scanner, false)
 		case constant.ARRAY_TYPE:
-			schema.ReadItems(m.Cmd, scanner)
+			schema.ReadItems(m.Cmd, scanner, false)
 		}
 
 		if ok := input.YesNoPrompt(m.Cmd, "Is the field required?"); ok {
@@ -217,9 +217,9 @@ func (m *MessageInputs) ReadItems() {
 	case constant.STRING_TYPE, constant.NUMBER_TYPE, constant.INTEGER_TYPE:
 		schema.ReadFormat(m.Cmd, schema.Type)
 	case constant.OBJECT_TYPE:
-		schema.ReadProperties(m.Cmd, scanner)
+		schema.ReadProperties(m.Cmd, scanner, false)
 	case constant.ARRAY_TYPE:
-		schema.ReadItems(m.Cmd, scanner)
+		schema.ReadItems(m.Cmd, scanner, false)
 	}
 
 	m.SetItems(schema)

@@ -12,7 +12,7 @@ Example:
 `
 
 var (
-	dirName string
+	messageDirName string
 )
 
 var messageCommand = &cobra.Command{
@@ -36,14 +36,14 @@ var messageCommand = &cobra.Command{
 			Required:    inputs.GetRequired(),
 		}
 
-		run.MessageCommandHandler(params, dirName)
+		run.MessageCommandHandler(params, messageDirName)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(messageCommand)
 
-	messageCommand.Flags().StringVarP(&dirName, "dir", "d", "", "Directory to save the message schema file")
+	messageCommand.Flags().StringVarP(&messageDirName, "dir", "d", "", "Directory to save the message schema file")
 
 	messageCommand.MarkFlagRequired("dir")
 }
