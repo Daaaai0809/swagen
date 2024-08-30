@@ -1,0 +1,37 @@
+title: ComplexTestModel
+type: object
+properties:
+  array1:
+    type: array
+    items:
+      type: object
+      properties:
+        array_prop1:
+          type: string
+        array_prop2:
+          type: string
+          format: password
+        array_prop3:
+          type: number
+          format: double
+        array_prop4:
+          type: integer
+          format: int32
+          nullable: true
+  name:
+    type: string
+  object1:
+    type: object
+    properties:
+      property1:
+        type: string
+      property2:
+        type: string
+        format: date-time
+      property3:
+        type: number
+        format: double
+      property4:
+        type: integer
+        format: int32
+        nullable: true
