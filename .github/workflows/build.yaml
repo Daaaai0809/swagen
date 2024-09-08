@@ -6,6 +6,7 @@ on:
       - closed
     branches:
       - main
+      - '!update-binary-files'
     
 permissions:
   contents: write
