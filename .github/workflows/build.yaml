@@ -27,11 +27,11 @@ jobs:
       - name: Run go mod tidy
         run: go mod tidy
 
-      - name: Run go build
-        run: go build -o swagen
-
       - name: Run go test
         run: go test ./...
+
+      - name: Run go build
+        run: go build -o swagen
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
@@ -59,7 +59,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Create new branch
+      - name: Create new branch from merged branch
         run: |
           if git show-ref --verify --quiet refs/heads/update-binary-files; then
             git checkout update-binary-files
@@ -67,8 +67,7 @@ jobs:
             git checkout -b update-binary-files
           fi
           git add swagen
-          git commit -m "Update binary files from artifact"
-          git push origin update-binary-files
+          git diff --exit-code || git commit -m "Update binary files from artifact" && git push origin update-binary-files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
