@@ -127,7 +127,7 @@ TestResponse:
   - tags
 ```
 
-### Model Schema (WIP)
+### Model Schema
 If you want to generate Model Schema (Data Object Definition) file, run this command.
 ```bash
 $ swagen message <FileName> -d <dir>
