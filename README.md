@@ -128,5 +128,7 @@ TestResponse:
 ```
 
 ### Model Schema (WIP)
-We are implementing Model Schema Generator.  
-Please waiting for them :)
+If you want to generate Model Schema (Data Object Definition) file, run this command.
+```bash
+$ swagen message <FileName> -d <dir>
+```
