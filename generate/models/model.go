@@ -6,15 +6,15 @@ import (
 )
 
 type ModelSchema struct {
-	Title string `yaml:"title"`
-	Type  string `yaml:"type"`
+	Title      string                     `yaml:"title"`
+	Type       string                     `yaml:"type"`
 	Properties map[string]generate.Schema `yaml:"properties,omitempty"`
 }
 
 func NewModelSchema(title string, type_ string, properties map[string]generate.Schema) *ModelSchema {
 	return &ModelSchema{
-		Title: title,
-		Type: type_,
+		Title:      title,
+		Type:       type_,
 		Properties: properties,
 	}
 }

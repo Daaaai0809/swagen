@@ -15,9 +15,9 @@ type IModelInput interface {
 }
 
 type ModelInputs struct {
-	Cmd     *cobra.Command
-	Title   string
-	Type    string
+	Cmd        *cobra.Command
+	Title      string
+	Type       string
 	Properties map[string]generate.Schema
 }
 
@@ -83,7 +83,7 @@ func (m *ModelInputs) ReadProperties() {
 
 	for {
 		schema := generate.Schema{}
-		
+
 		println("Enter the field name: ")
 
 		scanner := bufio.NewScanner(os.Stdin)

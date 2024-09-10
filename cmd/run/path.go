@@ -3,7 +3,7 @@ package run
 import (
 	"fmt"
 
-	"github.com/Daaaai0809/swagen/config"
+	"github.com/Daaaai0809/swagen"
 	"github.com/Daaaai0809/swagen/constant"
 	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/generate/methods"
@@ -26,7 +26,7 @@ func PathCommandHandler(params PathCommandParams, dir string) error {
 	var path string
 	var s generate.ISwaggerSchema = nil
 
-	c := config.GetConfig()
+	c := swagen.GetConfig()
 
 	switch params.Method {
 	case constant.GET_FILE:
