@@ -61,11 +61,11 @@ func TestModelSchema_ToYaml_Simple_Model(t *testing.T) {
 			Type: "string",
 		},
 		"age": {
-			Type: "integer",
+			Type:   "integer",
 			Format: "int32",
 		},
 		"is_student": {
-			Type: "boolean",
+			Type:     "boolean",
 			Nullable: true,
 		},
 	}
@@ -92,16 +92,16 @@ func TestModelSchema_ToYaml_Complex_Model(t *testing.T) {
 					Type: "string",
 				},
 				"property2": {
-					Type: "string",
+					Type:   "string",
 					Format: "date-time",
 				},
 				"property3": {
-					Type: "number",
+					Type:   "number",
 					Format: "double",
 				},
 				"property4": {
-					Type: "integer",
-					Format: "int32",
+					Type:     "integer",
+					Format:   "int32",
 					Nullable: true,
 				},
 			},
@@ -115,16 +115,16 @@ func TestModelSchema_ToYaml_Complex_Model(t *testing.T) {
 						Type: "string",
 					},
 					"array_prop2": {
-						Type: "string",
+						Type:   "string",
 						Format: "password",
 					},
 					"array_prop3": {
-						Type: "number",
+						Type:   "number",
 						Format: "double",
 					},
 					"array_prop4": {
-						Type: "integer",
-						Format: "int32",
+						Type:     "integer",
+						Format:   "int32",
 						Nullable: true,
 					},
 				},

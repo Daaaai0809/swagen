@@ -3,7 +3,7 @@ package run
 import (
 	"fmt"
 
-	"github.com/Daaaai0809/swagen/config"
+	"github.com/Daaaai0809/swagen"
 	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/generate/messages"
 )
@@ -22,7 +22,7 @@ type MessageCommandParams struct {
 func MessageCommandHandler(params MessageCommandParams, dir string) error {
 	var path string
 
-	c := config.GetConfig()
+	c := swagen.GetConfig()
 
 	path = fmt.Sprintf("%s/%s", c.GetMessageDir(), dir)
 

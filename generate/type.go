@@ -173,7 +173,7 @@ func (s *Schema) ReadProperties(cmd *cobra.Command, scanner *bufio.Scanner, isMo
 		case constant.ARRAY_TYPE:
 			prop.ReadItems(cmd, scanner, isModel)
 		default:
-			if ok := input.YesNoPrompt(cmd, "Is the property required?"); ok && !isModel{
+			if ok := input.YesNoPrompt(cmd, "Is the property required?"); ok && !isModel {
 				s.Required = append(s.Required, name)
 			}
 
