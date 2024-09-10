@@ -6,8 +6,9 @@ on:
       - closed
     branches:
       - main
-      - '!update-binary-files'
-    
+    paths-ignore:
+      - 'update-binary-files/**'
+
 permissions:
   contents: write
   pull-requests: write
