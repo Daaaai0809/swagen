@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/Daaaai0809/swagen/constant"
-	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
 )
@@ -18,7 +17,7 @@ type ModelInputs struct {
 	Cmd        *cobra.Command
 	Title      string
 	Type       string
-	Properties map[string]generate.Schema
+	Properties input.InputProperties
 }
 
 func NewModelInputs(cmd *cobra.Command) *ModelInputs {
@@ -70,19 +69,19 @@ func (m *ModelInputs) ReadType() {
 	m.SetType(t)
 }
 
-func (m *ModelInputs) SetProperties(properties map[string]generate.Schema) {
+func (m *ModelInputs) SetProperties(properties input.InputProperties) {
 	m.Properties = properties
 }
 
-func (m *ModelInputs) GetProperties() map[string]generate.Schema {
+func (m *ModelInputs) GetProperties() input.InputProperties {
 	return m.Properties
 }
 
 func (m *ModelInputs) ReadProperties() {
-	properties := make(map[string]generate.Schema)
+	properties := make(input.InputProperties)
 
 	for {
-		schema := generate.Schema{}
+		schema := input.NewInputSchema()
 
 		println("Enter the field name: ")
 

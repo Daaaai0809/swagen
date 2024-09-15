@@ -12,7 +12,7 @@ type ModelCommandParams struct {
 	FileName   string
 	Title      string
 	Type       string
-	Properties map[string]generate.Schema
+	Properties generate.IPropertiesMap
 }
 
 func ModelCommandHandler(params ModelCommandParams, dir string) error {

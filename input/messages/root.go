@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/Daaaai0809/swagen/constant"
-	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/generate/messages"
 	"github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
@@ -22,7 +21,7 @@ type MessageInputs struct {
 	Format      string
 	Nullable    bool
 	Properties  messages.MessageProperties
-	Items       *generate.Schema
+	Items       *input.InputSchema
 	Required    []string
 }
 
@@ -159,7 +158,7 @@ func (m *MessageInputs) ReadMessageProperties() {
 	msgRoot := messages.NewMessageProperties()
 
 	for {
-		schema := generate.NewSchema()
+		schema := input.NewInputSchema()
 
 		println("Enter the field name: ")
 
@@ -188,7 +187,7 @@ func (m *MessageInputs) ReadMessageProperties() {
 			schema.Nullable = true
 		}
 
-		msgRoot[fieldName] = *schema
+		msgRoot[fieldName] = schema
 
 		if ok := input.YesNoPrompt(m.Cmd, "Do you want to add more fields?"); !ok {
 			break
@@ -198,16 +197,16 @@ func (m *MessageInputs) ReadMessageProperties() {
 	m.SetMessageProperties(msgRoot)
 }
 
-func (m *MessageInputs) SetItems(items *generate.Schema) {
+func (m *MessageInputs) SetItems(items *input.InputSchema) {
 	m.Items = items
 }
 
-func (m *MessageInputs) GetItems() *generate.Schema {
+func (m *MessageInputs) GetItems() *input.InputSchema {
 	return m.Items
 }
 
 func (m *MessageInputs) ReadItems() {
-	schema := generate.NewSchema()
+	schema := input.NewInputSchema()
 
 	schema.ReadType(m.Cmd)
 

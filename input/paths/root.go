@@ -366,7 +366,7 @@ func (p *WritePathInputs) ReadRequestBody() {
 
 			content.Schema = append(content.Schema, &refSchema)
 		} else {
-			schema := generate.Schema{}
+			schema := input.NewInputSchema()
 
 			schema.ReadType(p.Cmd)
 
@@ -385,7 +385,7 @@ func (p *WritePathInputs) ReadRequestBody() {
 				}
 			}
 
-			content.Schema = append(content.Schema, &schema)
+			content.Schema = append(content.Schema, schema)
 		}
 
 		requestBody.Content[contentType] = content

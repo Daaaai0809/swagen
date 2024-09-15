@@ -66,20 +66,20 @@ func TestMessage_ToYaml_Simple_Response(t *testing.T) {
 	msgProperties := messages.NewMessageProperties()
 
 	msgType := "object"
-	msgProperties["dataObject"] = generate.Schema{
+	msgProperties["dataObject"] = &generate.Schema{
 		Type:     "object",
 		Required: []string{"property1", "property2", "property3", "property4"},
-		Properties: map[string]generate.Schema{
-			"property1": {
+		Properties: generate.PropertiesMap{
+			"property1": &generate.Schema{
 				Type: "string",
 			},
-			"property2": {
+			"property2": &generate.Schema{
 				Type: "string",
 			},
-			"property3": {
+			"property3": &generate.Schema{
 				Type: "number",
 			},
-			"property4": {
+			"property4": &generate.Schema{
 				Type:     "integer",
 				Format:   "int32",
 				Nullable: true,
@@ -98,37 +98,37 @@ func TestMessage_ToYaml_Simple_Response(t *testing.T) {
 func TestMessage_ToYaml_Complex_Response(t *testing.T) {
 	msgProperties := messages.NewMessageProperties()
 	msgType := "object"
-	msgProperties["dataObject"] = generate.Schema{
+	msgProperties["dataObject"] = &generate.Schema{
 		Type:     "object",
 		Required: []string{"property1", "property2", "property3", "property4", "objProp", "arrayProp"},
-		Properties: map[string]generate.Schema{
-			"property1": {
+		Properties: generate.PropertiesMap{
+			"property1": &generate.Schema{
 				Type: "string",
 			},
-			"property2": {
+			"property2": &generate.Schema{
 				Type: "string",
 			},
-			"property3": {
+			"property3": &generate.Schema{
 				Type: "number",
 			},
-			"property4": {
+			"property4": &generate.Schema{
 				Type:     "integer",
 				Format:   "int32",
 				Nullable: true,
 			},
-			"objProp": {
+			"objProp": &generate.Schema{
 				Type: "object",
-				Properties: map[string]generate.Schema{
-					"objProp1": {
+				Properties: generate.PropertiesMap{
+					"objProp1": &generate.Schema{
 						Type: "string",
 					},
-					"objProp2": {
+					"objProp2": &generate.Schema{
 						Type: "string",
 					},
-					"objProp3": {
+					"objProp3": &generate.Schema{
 						Type: "number",
 					},
-					"objProp4": {
+					"objProp4": &generate.Schema{
 						Type:     "integer",
 						Format:   "int32",
 						Nullable: true,
@@ -136,21 +136,21 @@ func TestMessage_ToYaml_Complex_Response(t *testing.T) {
 				},
 				Required: []string{"objProp1", "objProp2", "objProp3", "objProp4"},
 			},
-			"arrayProp": {
+			"arrayProp": &generate.Schema{
 				Type: "array",
 				Items: &generate.Schema{
 					Type: "object",
-					Properties: map[string]generate.Schema{
-						"arrayProp1": {
+					Properties: generate.PropertiesMap{
+						"arrayProp1": &generate.Schema{
 							Type: "string",
 						},
-						"arrayProp2": {
+						"arrayProp2": &generate.Schema{
 							Type: "string",
 						},
-						"arrayProp3": {
+						"arrayProp3": &generate.Schema{
 							Type: "number",
 						},
-						"arrayProp4": {
+						"arrayProp4": &generate.Schema{
 							Type:     "integer",
 							Format:   "int32",
 							Nullable: true,

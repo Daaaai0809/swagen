@@ -15,7 +15,7 @@ type MessageCommandParams struct {
 	Format      string
 	Nullable    bool
 	Properties  messages.MessageProperties
-	Items       *generate.Schema
+	Items       generate.ISchema
 	Required    []string
 }
 

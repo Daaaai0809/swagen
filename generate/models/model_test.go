@@ -56,15 +56,15 @@ func TestMain(m *testing.M) {
 func TestModelSchema_ToYaml_Simple_Model(t *testing.T) {
 	modelTitle := "SimpleTestModel"
 	modelType := "object"
-	modelProperties := map[string]generate.Schema{
-		"name": {
+	modelProperties := &generate.PropertiesMap{
+		"name": &generate.Schema{
 			Type: "string",
 		},
-		"age": {
+		"age": &generate.Schema{
 			Type:   "integer",
 			Format: "int32",
 		},
-		"is_student": {
+		"is_student": &generate.Schema{
 			Type:     "boolean",
 			Nullable: true,
 		},
@@ -81,48 +81,48 @@ func TestModelSchema_ToYaml_Simple_Model(t *testing.T) {
 func TestModelSchema_ToYaml_Complex_Model(t *testing.T) {
 	modelTitle := "ComplexTestModel"
 	modelType := "object"
-	modelProperties := map[string]generate.Schema{
-		"name": {
+	modelProperties := &generate.PropertiesMap{
+		"name": &generate.Schema{
 			Type: "string",
 		},
-		"object1": {
+		"object1": &generate.Schema{
 			Type: "object",
-			Properties: map[string]generate.Schema{
-				"property1": {
+			Properties: generate.PropertiesMap{
+				"property1": &generate.Schema{
 					Type: "string",
 				},
-				"property2": {
+				"property2": &generate.Schema{
 					Type:   "string",
 					Format: "date-time",
 				},
-				"property3": {
+				"property3": &generate.Schema{
 					Type:   "number",
 					Format: "double",
 				},
-				"property4": {
+				"property4": &generate.Schema{
 					Type:     "integer",
 					Format:   "int32",
 					Nullable: true,
 				},
 			},
 		},
-		"array1": {
+		"array1": &generate.Schema{
 			Type: "array",
 			Items: &generate.Schema{
 				Type: "object",
-				Properties: map[string]generate.Schema{
-					"array_prop1": {
+				Properties: generate.PropertiesMap{
+					"array_prop1": &generate.Schema{
 						Type: "string",
 					},
-					"array_prop2": {
+					"array_prop2": &generate.Schema{
 						Type:   "string",
 						Format: "password",
 					},
-					"array_prop3": {
+					"array_prop3": &generate.Schema{
 						Type:   "number",
 						Format: "double",
 					},
-					"array_prop4": {
+					"array_prop4": &generate.Schema{
 						Type:     "integer",
 						Format:   "int32",
 						Nullable: true,

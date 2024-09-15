@@ -5,7 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type MessageProperties = map[string]generate.Schema
+type MessageProperties = generate.PropertiesMap
 
 type Message struct {
 	MessageName string
@@ -13,7 +13,7 @@ type Message struct {
 	Format      string
 	Nullable    bool
 	Properties  MessageProperties
-	Items       *generate.Schema
+	Items       generate.ISchema
 	Required    []string
 }
 
@@ -24,7 +24,7 @@ type ToYamlMessageProperties struct {
 	Format     string            `yaml:"format,omitempty"`
 	Nullable   bool              `yaml:"nullable,omitempty"`
 	Properties MessageProperties `yaml:"properties"`
-	Items      *generate.Schema  `yaml:"items,omitempty"`
+	Items      generate.ISchema  `yaml:"items,omitempty"`
 	Required   []string          `yaml:"required,omitempty"`
 }
 
@@ -32,7 +32,7 @@ func NewMessageProperties() MessageProperties {
 	return make(MessageProperties)
 }
 
-func NewMessage(messageName string, type_ string, format string, nullable bool, properties MessageProperties, items *generate.Schema, required []string) *Message {
+func NewMessage(messageName string, type_ string, format string, nullable bool, properties MessageProperties, items generate.ISchema, required []string) *Message {
 	return &Message{
 		MessageName: messageName,
 		Type:        type_,
