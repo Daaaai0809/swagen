@@ -2,17 +2,21 @@ package models
 
 import (
 	"github.com/Daaaai0809/swagen/generate"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type ModelSchema struct {
+	Name       string                  `yaml:"-"`
 	Title      string                  `yaml:"title"`
 	Type       string                  `yaml:"type"`
 	Properties generate.IPropertiesMap `yaml:"properties,omitempty"`
 }
 
-func NewModelSchema(title string, type_ string, properties generate.IPropertiesMap) *ModelSchema {
+type YamlModelSchema = map[string]ModelSchema
+
+func NewModelSchema(name, title, type_ string, properties generate.IPropertiesMap) *ModelSchema {
 	return &ModelSchema{
+		Name:       name,
 		Title:      title,
 		Type:       type_,
 		Properties: properties,
@@ -20,7 +24,9 @@ func NewModelSchema(title string, type_ string, properties generate.IPropertiesM
 }
 
 func (m *ModelSchema) ToYaml() (string, error) {
-	yamlBytes, err := yaml.Marshal(m)
+	yamlBytes, err := yaml.Marshal(YamlModelSchema{
+		m.Name: *m,
+	})
 	if err != nil {
 		return "", err
 	}

@@ -2,7 +2,7 @@ package methods
 
 import (
 	"github.com/Daaaai0809/swagen/generate"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type GetPathSchema struct {
