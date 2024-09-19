@@ -130,5 +130,5 @@ TestResponse:
 ### Model Schema
 If you want to generate Model Schema (Data Object Definition) file, run this command.
 ```bash
-$ swagen message <FileName> -d <dir>
+$ swagen message <FileName> -d <dir> -n <ModelName>
 ```
