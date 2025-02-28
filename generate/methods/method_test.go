@@ -11,64 +11,12 @@ import (
 	"github.com/Daaaai0809/swagen/generate/methods"
 )
 
-const (
-	GET_PATH_SCHEMA_FILE_PATH    = "tests/generate/methods/Get.yaml"
-	POST_PATH_SCHEMA_FILE_PATH   = "tests/generate/methods/Post.yaml"
-	PUT_PATH_SCHEMA_FILE_PATH    = "tests/generate/methods/Put.yaml"
-	DELETE_PATH_SCHEMA_FILE_PATH = "tests/generate/methods/Delete.yaml"
-)
-
-var (
-	expectedYaml_Get_Path_Schema    string
-	expectedYaml_Post_Path_Schema   string
-	expectedYaml_Put_Path_Schema    string
-	expectedYaml_Delete_Path_Schema string
-)
-
 func TestMain(m *testing.M) {
 	fmt.Println("Setting up test environment")
 
 	os.Setenv("PATH_DIR", "test/paths")
 	os.Setenv("SCHEMA_DIR", "test/schemas")
 	os.Setenv("MODEL_DIR", "test/models")
-
-	currentDir, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Error getting root directory: ", err)
-		os.Exit(1)
-	}
-
-	rootDir := currentDir[:len(currentDir)-len("generate/methods")]
-
-	// NOTE: get TestFiles from root/tests/generate/methods
-	expectedYaml_Get_Path_Schema_Byte, err := os.ReadFile(fmt.Sprint(rootDir, GET_PATH_SCHEMA_FILE_PATH))
-	if err != nil {
-		fmt.Println("Error reading file: ", err)
-		os.Exit(1)
-	}
-
-	expectedYaml_Post_Path_Schema_Byte, err := os.ReadFile(fmt.Sprint(rootDir, POST_PATH_SCHEMA_FILE_PATH))
-	if err != nil {
-		fmt.Println("Error reading file: ", err)
-		os.Exit(1)
-	}
-
-	expectedYaml_Put_Path_Schema_Byte, err := os.ReadFile(fmt.Sprint(rootDir, PUT_PATH_SCHEMA_FILE_PATH))
-	if err != nil {
-		fmt.Println("Error reading file: ", err)
-		os.Exit(1)
-	}
-
-	expectedYaml_Delete_Path_Schema_Byte, err := os.ReadFile(fmt.Sprint(rootDir, DELETE_PATH_SCHEMA_FILE_PATH))
-	if err != nil {
-		fmt.Println("Error reading file: ", err)
-		os.Exit(1)
-	}
-
-	expectedYaml_Get_Path_Schema = string(expectedYaml_Get_Path_Schema_Byte)
-	expectedYaml_Post_Path_Schema = string(expectedYaml_Post_Path_Schema_Byte)
-	expectedYaml_Put_Path_Schema = string(expectedYaml_Put_Path_Schema_Byte)
-	expectedYaml_Delete_Path_Schema = string(expectedYaml_Delete_Path_Schema_Byte)
 
 	os.Exit(m.Run())
 }
@@ -90,7 +38,7 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 			Description: "Success",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/SuccessResponse"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/SuccessResponse"}},
 				},
 			},
 		},
@@ -98,7 +46,7 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 			Description: "Bad Request",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/BadRequestResponse"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/BadRequestResponse"}},
 				},
 			},
 		},
@@ -106,7 +54,7 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 			Description: "Unauthorized",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/UnauthorizedResponse"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/UnauthorizedResponse"}},
 				},
 			},
 		},
@@ -114,7 +62,7 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 			Description: "Forbidden",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/ForbiddenResponse"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/ForbiddenResponse"}},
 				},
 			},
 		},
@@ -122,7 +70,7 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 			Description: "Not Found",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/NotFoundResponse"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/NotFoundResponse"}},
 				},
 			},
 		},
@@ -130,7 +78,7 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 			Description: "Internal Server Error",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
 				},
 			},
 		},
@@ -138,7 +86,19 @@ func TestGetPathSchema_ToYaml(t *testing.T) {
 
 	yaml, err := getPathSchema.ToYaml()
 	assert.Nil(t, err)
-	assert.Equal(t, expectedYaml_Get_Path_Schema, yaml)
+	
+	tempPath := os.TempDir()
+	tempFileName := "get_test.yaml"
+
+	err = generate.GenerateYamlFile(getPathSchema, tempPath, tempFileName)
+	assert.Nil(t, err)
+	assert.FileExists(t, fmt.Sprintf("%s/%s", tempPath, tempFileName))
+
+	// Unmarshal the generated yaml file
+	// and compare it with the expected yaml
+	file, err_ := os.ReadFile(fmt.Sprintf("%s/%s", tempPath, tempFileName))
+	assert.Nil(t, err_)
+	assert.Equal(t, yaml, string(file))
 }
 
 func TestPostPathSchema_ToYaml(t *testing.T) {
@@ -147,7 +107,7 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 			Description: "Request body",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/RequestBody"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/RequestBody"}},
 				},
 			},
 		},
@@ -171,7 +131,7 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 				Description: "Created",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/CreatedResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/CreatedResponse"}},
 					},
 				},
 			},
@@ -179,7 +139,7 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 				Description: "Bad Request",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/BadRequestResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/BadRequestResponse"}},
 					},
 				},
 			},
@@ -187,7 +147,7 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 				Description: "Unauthorized",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/UnauthorizedResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/UnauthorizedResponse"}},
 					},
 				},
 			},
@@ -195,7 +155,7 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 				Description: "Forbidden",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/ForbiddenResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/ForbiddenResponse"}},
 					},
 				},
 			},
@@ -203,7 +163,7 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 				Description: "Not Found",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/NotFoundResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/NotFoundResponse"}},
 					},
 				},
 			},
@@ -211,7 +171,7 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 				Description: "Internal Server Error",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
 					},
 				},
 			},
@@ -219,7 +179,19 @@ func TestPostPathSchema_ToYaml(t *testing.T) {
 
 	yaml, err := postPathSchema.ToYaml()
 	assert.Nil(t, err)
-	assert.Equal(t, expectedYaml_Post_Path_Schema, yaml)
+
+	tempPath := os.TempDir()
+	tempFileName := "post_test.yaml"
+
+	err = generate.GenerateYamlFile(postPathSchema, tempPath, tempFileName)
+	assert.Nil(t, err)
+	assert.FileExists(t, fmt.Sprintf("%s/%s", tempPath, tempFileName))
+
+	// Unmarshal the generated yaml file
+	// and compare it with the expected yaml
+	file, err_ := os.ReadFile(fmt.Sprintf("%s/%s", tempPath, tempFileName))
+	assert.Nil(t, err_)
+	assert.Equal(t, yaml, string(file))
 }
 
 func TestPutPathSchema_ToYaml(t *testing.T) {
@@ -228,7 +200,7 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 			Description: "Request body",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/RequestBody"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/RequestBody"}},
 				},
 			},
 		},
@@ -252,7 +224,7 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 				Description: "Success",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/SuccessResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/SuccessResponse"}},
 					},
 				},
 			},
@@ -260,7 +232,7 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 				Description: "Bad Request",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/BadRequestResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/BadRequestResponse"}},
 					},
 				},
 			},
@@ -268,7 +240,7 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 				Description: "Unauthorized",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/UnauthorizedResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/UnauthorizedResponse"}},
 					},
 				},
 			},
@@ -276,7 +248,7 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 				Description: "Forbidden",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/ForbiddenResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/ForbiddenResponse"}},
 					},
 				},
 			},
@@ -284,7 +256,7 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 				Description: "Not Found",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/NotFoundResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/NotFoundResponse"}},
 					},
 				},
 			},
@@ -292,7 +264,7 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 				Description: "Internal Server Error",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
 					},
 				},
 			},
@@ -300,7 +272,19 @@ func TestPutPathSchema_ToYaml(t *testing.T) {
 
 	yaml, err := putPathSchema.ToYaml()
 	assert.Nil(t, err)
-	assert.Equal(t, expectedYaml_Put_Path_Schema, yaml)
+
+	tempPath := os.TempDir()
+	tempFileName := "put_test.yaml"
+
+	err = generate.GenerateYamlFile(putPathSchema, tempPath, tempFileName)
+	assert.Nil(t, err)
+	assert.FileExists(t, fmt.Sprintf("%s/%s", tempPath, tempFileName))
+
+	// Unmarshal the generated yaml file
+	// and compare it with the expected yaml
+	file, err_ := os.ReadFile(fmt.Sprintf("%s/%s", tempPath, tempFileName))
+	assert.Nil(t, err_)
+	assert.Equal(t, yaml, string(file))
 }
 
 func TestDeletePathSchema_ToYaml(t *testing.T) {
@@ -309,7 +293,7 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 			Description: "Request body",
 			Content: map[string]generate.Content{
 				"application/json": {
-					Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/RequestBody"}},
+					Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/RequestBody"}},
 				},
 			},
 		},
@@ -333,7 +317,7 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 				Description: "Success",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/SuccessResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/SuccessResponse"}},
 					},
 				},
 			},
@@ -341,7 +325,7 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 				Description: "Bad Request",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/BadRequestResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/BadRequestResponse"}},
 					},
 				},
 			},
@@ -349,7 +333,7 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 				Description: "Unauthorized",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/UnauthorizedResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/UnauthorizedResponse"}},
 					},
 				},
 			},
@@ -357,7 +341,7 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 				Description: "Forbidden",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/ForbiddenResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/ForbiddenResponse"}},
 					},
 				},
 			},
@@ -365,7 +349,7 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 				Description: "Not Found",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/NotFoundResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/NotFoundResponse"}},
 					},
 				},
 			},
@@ -373,7 +357,7 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 				Description: "Internal Server Error",
 				Content: map[string]generate.Content{
 					"application/json": {
-						Schema: generate.ContentSchema{&generate.RefSchema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
+						Schema: generate.ContentSchema{&generate.Schema{Ref: "#/components/schemas/InternalServerErrorResponse"}},
 					},
 				},
 			},
@@ -381,5 +365,17 @@ func TestDeletePathSchema_ToYaml(t *testing.T) {
 
 	yaml, err := deletePathSchema.ToYaml()
 	assert.Nil(t, err)
-	assert.Equal(t, expectedYaml_Delete_Path_Schema, yaml)
+
+	tempPath := os.TempDir()
+	tempFileName := "delete_test.yaml"
+
+	err = generate.GenerateYamlFile(deletePathSchema, tempPath, tempFileName)
+	assert.Nil(t, err)
+	assert.FileExists(t, fmt.Sprintf("%s/%s", tempPath, tempFileName))
+
+	// Unmarshal the generated yaml file
+	// and compare it with the expected yaml
+	file, err_ := os.ReadFile(fmt.Sprintf("%s/%s", tempPath, tempFileName))
+	assert.Nil(t, err_)
+	assert.Equal(t, yaml, string(file))
 }

@@ -11,53 +11,12 @@ import (
 	"github.com/Daaaai0809/swagen/generate/messages"
 )
 
-const SIMPLE_TEST_RESPONSE_FILE_PATH = "tests/generate/messages/SimpleTestResponse.yaml"
-const COMPLEX_TEST_RESPONSE_FILE_PATH = "tests/generate/messages/ComplexTestResponse.yaml"
-const EMPTY_TEST_RESPONSE_FILE_PATH = "tests/generate/messages/EmptyTestResponse.yaml"
-
-var (
-	expectedYaml_Simple_Response  string
-	expectedYaml_Complex_Response string
-	expectedYaml_Empty_Response   string
-)
-
 func TestMain(m *testing.M) {
 	fmt.Println("Setting up test environment")
 
 	os.Setenv("PATH_DIR", "test/paths")
 	os.Setenv("SCHEMA_DIR", "test/schemas")
 	os.Setenv("MODEL_DIR", "test/models")
-
-	currentDir, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Error getting root directory: ", err)
-		os.Exit(1)
-	}
-
-	rootDir := currentDir[:len(currentDir)-len("generate/messages")]
-
-	// NOTE: get TestFiles from root/tests/generate/messages
-	expectedYaml_Simple_Response_Byte, err := os.ReadFile(fmt.Sprint(rootDir, SIMPLE_TEST_RESPONSE_FILE_PATH))
-	if err != nil {
-		fmt.Println("Error reading file: ", err)
-		os.Exit(1)
-	}
-
-	expectedYaml_Complex_Response_Byte, err := os.ReadFile(fmt.Sprint(rootDir, COMPLEX_TEST_RESPONSE_FILE_PATH))
-	if err != nil {
-		fmt.Println("Error reading file: ", err)
-		os.Exit(1)
-	}
-
-	expectedYaml_Empty_Response_Byte, err := os.ReadFile(fmt.Sprint(rootDir, EMPTY_TEST_RESPONSE_FILE_PATH))
-	if err != nil {
-		fmt.Println("Error reading file: ", err)
-		os.Exit(1)
-	}
-
-	expectedYaml_Simple_Response = string(expectedYaml_Simple_Response_Byte)
-	expectedYaml_Complex_Response = string(expectedYaml_Complex_Response_Byte)
-	expectedYaml_Empty_Response = string(expectedYaml_Empty_Response_Byte)
 
 	os.Exit(m.Run())
 }
@@ -66,20 +25,20 @@ func TestMessage_ToYaml_Simple_Response(t *testing.T) {
 	msgProperties := messages.NewMessageProperties()
 
 	msgType := "object"
-	msgProperties["dataObject"] = &generate.Schema{
+	msgProperties["dataObject"] = generate.Schema{
 		Type:     "object",
 		Required: []string{"property1", "property2", "property3", "property4"},
 		Properties: generate.PropertiesMap{
-			"property1": &generate.Schema{
+			"property1": generate.Schema{
 				Type: "string",
 			},
-			"property2": &generate.Schema{
+			"property2": generate.Schema{
 				Type: "string",
 			},
-			"property3": &generate.Schema{
+			"property3": generate.Schema{
 				Type: "number",
 			},
-			"property4": &generate.Schema{
+			"property4": generate.Schema{
 				Type:     "integer",
 				Format:   "int32",
 				Nullable: true,
@@ -89,46 +48,56 @@ func TestMessage_ToYaml_Simple_Response(t *testing.T) {
 
 	msg := messages.NewMessage("SimpleTestResponse", msgType, "", false, msgProperties, nil, []string{"dataObject"})
 
-	yaml, err := msg.ToYaml()
+	tempPath := os.TempDir()
+	tempFileName := "simple_test_response.yaml"
+
+	err := generate.GenerateYamlFile(msg, tempPath, tempFileName)
 
 	assert.Nil(t, err)
-	assert.Equal(t, expectedYaml_Simple_Response, yaml)
+	assert.FileExists(t, fmt.Sprintf("%s/%s", tempPath, tempFileName))
+
+	// Unmarshal the generated yaml file
+	// and compare it with the expected yaml
+	file, err := os.ReadFile(fmt.Sprintf("%s/%s", tempPath, tempFileName))
+	assert.Nil(t, err)
+	yaml, _ := msg.ToYaml()
+	assert.Equal(t, yaml, string(file))
 }
 
 func TestMessage_ToYaml_Complex_Response(t *testing.T) {
 	msgProperties := messages.NewMessageProperties()
 	msgType := "object"
-	msgProperties["dataObject"] = &generate.Schema{
+	msgProperties["dataObject"] = generate.Schema{
 		Type:     "object",
 		Required: []string{"property1", "property2", "property3", "property4", "objProp", "arrayProp"},
 		Properties: generate.PropertiesMap{
-			"property1": &generate.Schema{
+			"property1": generate.Schema{
 				Type: "string",
 			},
-			"property2": &generate.Schema{
+			"property2": generate.Schema{
 				Type: "string",
 			},
-			"property3": &generate.Schema{
+			"property3": generate.Schema{
 				Type: "number",
 			},
-			"property4": &generate.Schema{
+			"property4": generate.Schema{
 				Type:     "integer",
 				Format:   "int32",
 				Nullable: true,
 			},
-			"objProp": &generate.Schema{
+			"objProp": generate.Schema{
 				Type: "object",
 				Properties: generate.PropertiesMap{
-					"objProp1": &generate.Schema{
+					"objProp1": generate.Schema{
 						Type: "string",
 					},
-					"objProp2": &generate.Schema{
+					"objProp2": generate.Schema{
 						Type: "string",
 					},
-					"objProp3": &generate.Schema{
+					"objProp3": generate.Schema{
 						Type: "number",
 					},
-					"objProp4": &generate.Schema{
+					"objProp4": generate.Schema{
 						Type:     "integer",
 						Format:   "int32",
 						Nullable: true,
@@ -136,21 +105,21 @@ func TestMessage_ToYaml_Complex_Response(t *testing.T) {
 				},
 				Required: []string{"objProp1", "objProp2", "objProp3", "objProp4"},
 			},
-			"arrayProp": &generate.Schema{
+			"arrayProp": generate.Schema{
 				Type: "array",
 				Items: &generate.Schema{
 					Type: "object",
 					Properties: generate.PropertiesMap{
-						"arrayProp1": &generate.Schema{
+						"arrayProp1": generate.Schema{
 							Type: "string",
 						},
-						"arrayProp2": &generate.Schema{
+						"arrayProp2": generate.Schema{
 							Type: "string",
 						},
-						"arrayProp3": &generate.Schema{
+						"arrayProp3": generate.Schema{
 							Type: "number",
 						},
-						"arrayProp4": &generate.Schema{
+						"arrayProp4": generate.Schema{
 							Type:     "integer",
 							Format:   "int32",
 							Nullable: true,
@@ -165,9 +134,20 @@ func TestMessage_ToYaml_Complex_Response(t *testing.T) {
 	msg := messages.NewMessage("ComplexTestResponse", msgType, "", false, msgProperties, nil, []string{"dataObject"})
 
 	yaml, err := msg.ToYaml()
-
 	assert.Nil(t, err)
-	assert.Equal(t, expectedYaml_Complex_Response, yaml)
+
+	tempPath := os.TempDir()
+	tempFileName := "complex_test_response.yaml"
+
+	err = generate.GenerateYamlFile(msg, tempPath, tempFileName)
+	assert.Nil(t, err)
+	assert.FileExists(t, fmt.Sprintf("%s/%s", tempPath, tempFileName))
+
+	// Unmarshal the generated yaml file
+	// and compare it with the expected yaml
+	file, err := os.ReadFile(fmt.Sprintf("%s/%s", tempPath, tempFileName))
+	assert.Nil(t, err)
+	assert.Equal(t, yaml, string(file))
 }
 
 func TestMessage_ToYaml_Empty_Response(t *testing.T) {
@@ -179,5 +159,17 @@ func TestMessage_ToYaml_Empty_Response(t *testing.T) {
 
 	yaml, err := msg.ToYaml()
 	assert.Nil(t, err)
-	assert.Equal(t, expectedYaml_Empty_Response, yaml)
+
+	tempPath := os.TempDir()
+	tempFileName := "empty_test_response.yaml"
+
+	err = generate.GenerateYamlFile(msg, tempPath, tempFileName)
+	assert.Nil(t, err)
+	assert.FileExists(t, fmt.Sprintf("%s/%s", tempPath, tempFileName))
+
+	// Unmarshal the generated yaml file
+	// and compare it with the expected yaml
+	file, err := os.ReadFile(fmt.Sprintf("%s/%s", tempPath, tempFileName))
+	assert.Nil(t, err)
+	assert.Equal(t, yaml, string(file))
 }
