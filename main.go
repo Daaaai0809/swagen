@@ -4,20 +4,21 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Daaaai0809/swagen"
+	"github.com/Daaaai0809/swagen/cmd"
+	"github.com/Daaaai0809/swagen/config"
 	"github.com/joho/godotenv"
 )
 
 func main() {
 	godotenv.Load(".env")
 
-	c, err := swagen.NewConfig()
+	c, err := config.NewConfig()
 	if err != nil {
 		fmt.Printf("[ERROR] %s\n", err.Error())
 		os.Exit(1)
 	}
 
-	swagen.SetConfig(c)
+	config.SetConfig(c)
 
-	Execute()
+	cmd.Execute()
 }

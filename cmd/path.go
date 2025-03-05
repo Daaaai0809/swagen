@@ -1,7 +1,8 @@
-package main
+package cmd
 
 import (
 	"github.com/Daaaai0809/swagen/cmd/run"
+	"github.com/Daaaai0809/swagen/config"
 	"github.com/Daaaai0809/swagen/constant"
 	"github.com/Daaaai0809/swagen/generate"
 	input_path "github.com/Daaaai0809/swagen/input/paths"
@@ -26,10 +27,16 @@ var pathCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		method := args[0]
 
+		config, err := config.NewConfig()
+		if err != nil {
+			cmd.Println(err)
+			return
+		}
+
 		var params run.PathCommandParams
 		switch method {
 		case constant.GET_FILE:
-			inputs := input_path.NewGetPathInputs(cmd)
+			inputs := input_path.NewGetPathInputs(cmd, config)
 			inputs.ReadAll()
 
 			params = run.PathCommandParams{
@@ -44,7 +51,7 @@ var pathCommand = &cobra.Command{
 				Responses:   inputs.GetResponses(),
 			}
 		case constant.POST_FILE:
-			inputs := input_path.NewPostPathInputs(cmd)
+			inputs := input_path.NewPostPathInputs(cmd, config)
 			inputs.ReadAll()
 
 			params = run.PathCommandParams{
@@ -60,7 +67,7 @@ var pathCommand = &cobra.Command{
 				Responses:   inputs.GetResponses(),
 			}
 		case constant.PUT_FILE:
-			inputs := input_path.NewPutPathInputs(cmd)
+			inputs := input_path.NewPutPathInputs(cmd, config)
 			inputs.ReadAll()
 
 			params = run.PathCommandParams{
@@ -76,7 +83,7 @@ var pathCommand = &cobra.Command{
 				Responses:   inputs.GetResponses(),
 			}
 		case constant.DELETE_FILE:
-			inputs := input_path.NewDeletePathInputs(cmd)
+			inputs := input_path.NewDeletePathInputs(cmd, config)
 			inputs.ReadAll()
 
 			params = run.PathCommandParams{

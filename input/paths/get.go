@@ -1,6 +1,7 @@
 package path
 
 import (
+	"github.com/Daaaai0809/swagen/config"
 	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
@@ -10,10 +11,11 @@ type GetPathInputs struct {
 	RootPathInputs
 }
 
-func NewGetPathInputs(cmd *cobra.Command) *GetPathInputs {
+func NewGetPathInputs(cmd *cobra.Command, config *config.Config) *GetPathInputs {
 	return &GetPathInputs{
 		RootPathInputs: RootPathInputs{
 			Cmd:         cmd,
+			Config:      config,
 			FileName:    "",
 			OperationID: "",
 			Summary:     "",

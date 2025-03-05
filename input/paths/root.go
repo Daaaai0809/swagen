@@ -4,9 +4,11 @@ import (
 	"bufio"
 	"os"
 
+	"github.com/Daaaai0809/swagen/config"
 	"github.com/Daaaai0809/swagen/constant"
 	"github.com/Daaaai0809/swagen/generate"
 	input "github.com/Daaaai0809/swagen/input"
+	// "github.com/Daaaai0809/swagen/input/ref"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +18,7 @@ type IPathInputs interface {
 
 type RootPathInputs struct {
 	Cmd         *cobra.Command
+	Config      *config.Config
 	FileName    string
 	OperationID string
 	Summary     string
@@ -181,7 +184,7 @@ func (p *RootPathInputs) ReadParameters() {
 
 	for {
 		if ok := input.YesNoPrompt(p.Cmd, "Ref Parameter?"); ok {
-			var parameter generate.RefParameter
+			var parameter = generate.RefParameter{}
 
 			p.Cmd.Println("Enter the Ref: ")
 
@@ -300,12 +303,26 @@ func (p *RootPathInputs) ReadResponses() {
 			response.Content = map[string]generate.Content{
 				contentType: {
 					Schema: generate.ContentSchema{
-						&generate.RefSchema{
+						&generate.Schema{
 							Ref: scanner.Text(),
 						},
 					},
 				},
 			}
+
+			// TODO: Remove Comment after implementing Param Schema Generator
+			// ref := ref.NewRef(p.Config, ref.MODE_PARAMETER)
+			// ref.Analyze()
+
+			// response.Content = map[string]generate.Content{
+			// 	contentType: {
+			// 		Schema: generate.ContentSchema{
+			// 			&generate.RefSchema{
+			// 				Ref: ref.GetRef(),
+			// 			},
+			// 		},
+			// 	},
+			// }
 		} else {
 			// TODO: Implement Defination of Schema with generate.Schema
 			response.Content = map[string]generate.Content{
@@ -359,12 +376,12 @@ func (p *WritePathInputs) ReadRequestBody() {
 	}
 
 	for {
+		schema := input.NewInputSchema()
+
 		if ok := input.YesNoPrompt(p.Cmd, "Do you want to add a ref?"); ok {
-			refSchema := generate.RefSchema{}
+			schema.ReadRef(p.Cmd, scanner)
 
-			refSchema.ReadRef(p.Cmd, scanner)
-
-			content.Schema = append(content.Schema, &refSchema)
+			content.Schema = append(content.Schema, schema)
 		} else {
 			schema := input.NewInputSchema()
 

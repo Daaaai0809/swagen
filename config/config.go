@@ -1,4 +1,4 @@
-package swagen
+package config
 
 import (
 	"errors"

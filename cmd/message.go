@@ -1,7 +1,8 @@
-package main
+package cmd
 
 import (
 	"github.com/Daaaai0809/swagen/cmd/run"
+	"github.com/Daaaai0809/swagen/config"
 	input_message "github.com/Daaaai0809/swagen/input/messages"
 	"github.com/spf13/cobra"
 )
@@ -22,7 +23,7 @@ var messageCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fileName := args[0]
 
-		inputs := input_message.NewMessageInputs(cmd)
+		inputs := input_message.NewMessageInputs(cmd, config.GetConfig(), messageDirName)
 		inputs.ReadAll()
 
 		params := run.MessageCommandParams{

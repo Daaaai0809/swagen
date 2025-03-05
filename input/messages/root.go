@@ -2,11 +2,15 @@ package messages
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 
+	"github.com/Daaaai0809/swagen/config"
 	"github.com/Daaaai0809/swagen/constant"
+	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/generate/messages"
 	"github.com/Daaaai0809/swagen/input"
+	"github.com/Daaaai0809/swagen/input/ref"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +20,8 @@ type IMessageInput interface {
 
 type MessageInputs struct {
 	Cmd         *cobra.Command
+	Config      *config.Config
+	DestDir     string
 	MessageName string
 	Type        string
 	Format      string
@@ -25,9 +31,11 @@ type MessageInputs struct {
 	Required    []string
 }
 
-func NewMessageInputs(cmd *cobra.Command) *MessageInputs {
+func NewMessageInputs(cmd *cobra.Command, config *config.Config, destDir string) *MessageInputs {
 	return &MessageInputs{
-		Cmd: cmd,
+		Cmd:     cmd,
+		Config:  config,
+		DestDir: destDir,
 	}
 }
 
@@ -158,6 +166,29 @@ func (m *MessageInputs) ReadMessageProperties() {
 	msgRoot := messages.NewMessageProperties()
 
 	for {
+		if ok := input.YesNoPrompt(m.Cmd, "Do you need ref ?"); ok {
+			println("Enter the field name: ")
+			scanner := bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+			fieldName := scanner.Text()
+
+			ref := ref.NewRef(m.Config, m.DestDir, ref.MODE_MESSAGE)
+			if err := ref.Analyze(); err != nil {
+				fmt.Println("Error analyzing ref: ", err)
+				os.Exit(1)
+			}
+
+			msgRoot[fieldName] = generate.Schema{
+				Ref: ref.GetRef(),
+			}
+
+			if ok := input.YesNoPrompt(m.Cmd, "Do you want to add more fields?"); !ok {
+				break
+			}
+
+			continue
+		}
+
 		schema := input.NewInputSchema()
 
 		println("Enter the field name: ")
@@ -187,7 +218,7 @@ func (m *MessageInputs) ReadMessageProperties() {
 			schema.Nullable = true
 		}
 
-		msgRoot[fieldName] = schema
+		msgRoot[fieldName] = schema.Cast()
 
 		if ok := input.YesNoPrompt(m.Cmd, "Do you want to add more fields?"); !ok {
 			break

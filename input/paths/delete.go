@@ -1,6 +1,7 @@
 package path
 
 import (
+	"github.com/Daaaai0809/swagen/config"
 	"github.com/Daaaai0809/swagen/generate"
 	"github.com/Daaaai0809/swagen/input"
 	"github.com/spf13/cobra"
@@ -10,11 +11,12 @@ type DeletePathInputs struct {
 	WritePathInputs
 }
 
-func NewDeletePathInputs(cmd *cobra.Command) *DeletePathInputs {
+func NewDeletePathInputs(cmd *cobra.Command, config *config.Config) *DeletePathInputs {
 	return &DeletePathInputs{
 		WritePathInputs{
 			RootPathInputs: RootPathInputs{
 				Cmd:         cmd,
+				Config:      config,
 				FileName:    "",
 				OperationID: "",
 				Summary:     "",
